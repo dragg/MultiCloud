@@ -19,3 +19,12 @@ Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController',
 ]);
+
+Route::group(['namespace' => 'Cloud'], function() {
+    Route::get('/dropbox-auth-start', 'CloudAuthController@authDropbox');
+
+    Route::get('/dropbox-auth-finish', 'CloudAuthController@callbackDropbox');
+
+    Route::get('/dropbox-profile', 'DropboxController@index');
+    Route::get('/dropbox-exit', 'DropboxController@destroy');
+});

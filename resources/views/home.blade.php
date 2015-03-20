@@ -10,6 +10,20 @@
 				<div class="panel-body">
 					You are logged in!
 				</div>
+                <div class="panel-body">
+                    <form action="{{action('Cloud\CloudAuthController@authDropbox')}}">
+                        <button type="submit" class="btn btn-primary">Dropbox</button>
+                    </form>
+                    @if(Auth::user()->accessTokenDropbox != null)
+                        <form action="{{action('Cloud\DropboxController@index')}}">
+                            <button type="submit" class="btn btn-primary">Get my profile</button>
+                        </form>
+
+                        <form action="{{action('Cloud\DropboxController@destroy')}}">
+                            <button type="submit" class="btn btn-primary">Exit from dropbox</button>
+                        </form>
+                    @endif
+                </div>
 			</div>
 		</div>
 	</div>
