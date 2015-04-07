@@ -4,6 +4,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yandex\Disk\DiskClient;
 
 class YandexController extends Controller {
@@ -102,7 +103,8 @@ class YandexController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+		\Auth::user()->accessTokenYandex = null;
+        \Auth::user()->save();
 	}
 
 }
