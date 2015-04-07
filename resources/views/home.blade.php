@@ -38,6 +38,20 @@
                         </form>
                     @endif
                 </div>
+                <div class="panel-body">
+                    <form action="{{action('Cloud\CloudAuthController@authGoogle')}}">
+                        <button type="submit" class="btn btn-primary">Google</button>
+                    </form>
+                    @if(Auth::user()->accessTokenGoogle != null)
+                        <form action="{{action('Cloud\GoogleController@index')}}">
+                            <button type="submit" class="btn btn-primary">Get my root files</button>
+                        </form>
+
+                        <form action="{{action('Cloud\GoogleController@destroy')}}">
+                            <button type="submit" class="btn btn-primary">Exit from google</button>
+                        </form>
+                    @endif
+                </div>
 			</div>
 		</div>
 	</div>

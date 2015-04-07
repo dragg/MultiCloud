@@ -18,7 +18,8 @@ return [
     ],
 
     'google_drive' => [
-        'id'       => '353177346510-55osd15jkh103uq7ekn3gap3ep00d3q4.apps.googleusercontent.com',
+        'name'      => 'MultiCloudThesis',
+        'id'        => '353177346510-55osd15jkh103uq7ekn3gap3ep00d3q4.apps.googleusercontent.com',
         'secret'    => 'zxe-f9WK884_M5imbnfKm02P',
     ],
 ];

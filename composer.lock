@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b62fbe74ea18126721222e3ed4c6bcd1",
+    "hash": "c716c77ac8bbb577f2601040a90783bc",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -260,6 +260,51 @@
                 "dropbox"
             ],
             "time": "2015-02-23 20:51:29"
+        },
+        {
+            "name": "google/apiclient",
+            "version": "1.0.6-beta",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/google/google-api-php-client.git",
+                "reference": "a41a9dc0662e36420030eaab802dbb1f85459479"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/google/google-api-php-client/zipball/a41a9dc0662e36420030eaab802dbb1f85459479",
+                "reference": "a41a9dc0662e36420030eaab802dbb1f85459479",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "src/"
+            ],
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "Client library for Google APIs",
+            "homepage": "http://developers.google.com/api-client-library/php",
+            "keywords": [
+                "google"
+            ],
+            "time": "2014-09-30 19:33:59"
         },
         {
             "name": "guzzle/cache",
@@ -2722,16 +2767,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.6.1",
+            "version": "4.6.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "08b2aacdd8433abbba468f995d6d64b76a7a62ec"
+                "reference": "6c773fda0bdb5ea891d9e4430dcc26c990b9130b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/08b2aacdd8433abbba468f995d6d64b76a7a62ec",
-                "reference": "08b2aacdd8433abbba468f995d6d64b76a7a62ec",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6c773fda0bdb5ea891d9e4430dcc26c990b9130b",
+                "reference": "6c773fda0bdb5ea891d9e4430dcc26c990b9130b",
                 "shasum": ""
             },
             "require": {
@@ -2770,9 +2815,6 @@
             "autoload": {
                 "classmap": [
                     "src/"
-                ],
-                "files": [
-                    "src/Framework/Assert/Functions.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2793,7 +2835,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-04-03 13:46:59"
+            "time": "2015-04-07 09:16:49"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
@@ -3275,7 +3317,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "nixsolutions/yandex-php-library": 20
+        "nixsolutions/yandex-php-library": 20,
+        "google/apiclient": 10
     },
     "prefer-stable": false,
     "prefer-lowest": false,

@@ -105,6 +105,7 @@ class YandexController extends Controller {
 	{
 		\Auth::user()->accessTokenYandex = null;
         \Auth::user()->save();
+        return redirect('/home');
 	}
 
 }

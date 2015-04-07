@@ -6,10 +6,13 @@ use Dropbox as dbx;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Yandex\OAuth\OAuthClient;
 use Yandex\OAuth\Exception\AuthRequestException;
+use Google_Client;
+use Google_Service_Drive;
 
 class CloudAuthController extends Controller {
 
@@ -103,6 +106,42 @@ class CloudAuthController extends Controller {
         Auth::user()->save();
 
         // если вы передавали параметр state, то его можно получить в $_GET['state']
+
+        return redirect('/home');
+    }
+
+    public function authGoogle()
+    {
+        $client = new Google_Client();
+
+        //$client->setApplicationName(Config::get('clouds.google_drive.name'));
+        $client->setClientSecret(Config::get('clouds.google_drive.secret'));
+        $client->setClientId(Config::get('clouds.google_drive.id'));
+        $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+        $client->setRedirectUri(Config::get('app.url') . '/google-auth-finish');
+        $url = $client->createAuthUrl();
+
+        return redirect($url);
+    }
+
+    public function callbackGoogle(Request $request)
+    {
+        if($request->exists('code')) {
+            Log::info($request->all());
+            $client = new Google_Client();
+            $client->setClientSecret(Config::get('clouds.google_drive.secret'));
+            $client->setClientId(Config::get('clouds.google_drive.id'));
+            $client->setRedirectUri(Config::get('app.url') . '/google-auth-finish');
+            $accessTokenJSON = $client->authenticate($request->get('code'));
+
+            Log::info($accessTokenJSON);
+            $token = json_decode($accessTokenJSON);
+            Auth::user()->accessTokenGoogle = $token->access_token;
+            Auth::user()->token_type_google = $token->token_type;
+            Auth::user()->expires_in_google = $token->expires_in;
+            Auth::user()->created_google = $token->created;
+            Auth::user()->save();
+        }
 
         return redirect('/home');
     }
