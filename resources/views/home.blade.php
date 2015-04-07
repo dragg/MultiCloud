@@ -24,6 +24,20 @@
                         </form>
                     @endif
                 </div>
+                <div class="panel-body">
+                    <form action="{{action('Cloud\CloudAuthController@authYandex')}}">
+                        <button type="submit" class="btn btn-primary">Yandex</button>
+                    </form>
+                    @if(Auth::user()->accessTokenYandex != null)
+                        <form action="{{action('Cloud\YandexController@index')}}">
+                            <button type="submit" class="btn btn-primary">Get my root files</button>
+                        </form>
+
+                        <form action="{{action('Cloud\YandexController@destroy')}}">
+                            <button type="submit" class="btn btn-primary">Exit from yandex</button>
+                        </form>
+                    @endif
+                </div>
 			</div>
 		</div>
 	</div>

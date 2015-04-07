@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
+use Yandex\OAuth\OAuthClient;
+use Yandex\OAuth\Exception\AuthRequestException;
 
 class CloudAuthController extends Controller {
 
@@ -68,8 +70,40 @@ class CloudAuthController extends Controller {
         $appInfo = new dbx\AppInfo(Config::get('clouds.dropbox.key'),
             Config::get('clouds.dropbox.secret'));
         $clientIdentifier = self::$clientIdentifier;
-        $redirectUri = "https://multicloud.app/dropbox-auth-finish";
+        $redirectUri = "https://multicloud.com/dropbox-auth-finish";
         $csrfTokenStore = new dbx\ArrayEntryStore($session, 'dropbox-auth-csrf-token');
         return new dbx\WebAuth($appInfo, $clientIdentifier, $redirectUri, $csrfTokenStore);
+    }
+
+    public function authYandex()
+    {
+        $client = new OAuthClient(Config::get('clouds.yandex_disk.id'));
+        // сделать редирект и выйти
+        $client->authRedirect(true);
+        //Передать в запросе какое-то значение в параметре state, чтобы Yandex в ответе его вернул
+        $state = 'yandex-php-library';
+        $client->authRedirect(true, OAuthClient::CODE_AUTH_TYPE, $state);
+    }
+
+    public function callbackYandex()
+    {
+        $client = new OAuthClient(Config::get('clouds.yandex_disk.id'), Config::get('clouds.yandex_disk.password'));
+
+        try {
+            // осуществляем обмен
+            $client->requestAccessToken($_REQUEST['code']);
+        } catch (AuthRequestException $ex) {
+            Log::warning($ex->getMessage());
+        }
+
+        // забираем полученный токен
+        $token = $client->getAccessToken();
+
+        Auth::user()->accessTokenYandex = $token;
+        Auth::user()->save();
+
+        // если вы передавали параметр state, то его можно получить в $_GET['state']
+
+        return redirect('/home');
     }
 }
