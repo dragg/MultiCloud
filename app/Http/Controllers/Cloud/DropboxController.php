@@ -1,10 +1,12 @@
 <?php namespace App\Http\Controllers\Cloud;
 
+use App\Dropbox;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Dropbox as dbx;
+use Illuminate\Support\Facades\Log;
 
 class DropboxController extends Controller {
 
@@ -17,8 +19,6 @@ class DropboxController extends Controller {
 	 */
 	public function index()
     {
-        $client = new dbx\Client(Auth::user()->accessTokenDropbox, self::$clientIdentifier);
-        return $client->getAccountInfo();
     }
 
 	/**
@@ -49,7 +49,16 @@ class DropboxController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+        $dropbox = Dropbox::findOrFail((int)$id);
+        if(Auth::user()->id === $dropbox->user_id)
+        {
+            $client = new dbx\Client($dropbox->access_token, self::$clientIdentifier);
+            $response = $client->getAccountInfo();
+        }
+        else {
+            $response = "Access denied!";
+        }
+        return $response;
 	}
 
 	/**
@@ -80,13 +89,20 @@ class DropboxController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy()
+	public function destroy($id)
 	{
-        $client = new dbx\Client(Auth::user()->accessTokenDropbox, self::$clientIdentifier);
-        Auth::user()->accessTokenDropbox = null;
-        Auth::user()->save();
-        $client->disableAccessToken();
-        return redirect('/home');
+        $dropbox = Dropbox::findOrFail((int)$id);
+        if(Auth::user()->id === $dropbox->user_id)
+        {
+            $client = new dbx\Client($dropbox->access_token, self::$clientIdentifier);
+            $client->disableAccessToken();
+            $dropbox->delete();
+            return redirect('/home');
+        }
+        else {
+            $response = "Access denied!";
+            return $response;
+        }
 	}
 
 }

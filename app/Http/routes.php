@@ -25,8 +25,8 @@ Route::group(['namespace' => 'Cloud'], function() {
 
     Route::get('/dropbox-auth-finish', 'CloudAuthController@callbackDropbox');
 
-    Route::get('/dropbox-profile', 'DropboxController@index');
-    Route::get('/dropbox-exit', 'DropboxController@destroy');
+    Route::get('/dropbox-profile/{id}', 'DropboxController@show');
+    Route::get('/dropbox-exit/{id}', 'DropboxController@destroy');
 
 
     Route::get('/yandex-auth-start', 'CloudAuthController@authYandex');

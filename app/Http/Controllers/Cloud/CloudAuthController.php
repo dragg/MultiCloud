@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Cloud;
 
+use App\Dropbox;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Dropbox as dbx;
@@ -13,6 +14,7 @@ use Yandex\OAuth\OAuthClient;
 use Yandex\OAuth\Exception\AuthRequestException;
 use Google_Client;
 use Google_Service_Drive;
+use App\Services\DropBoxServices;
 
 class CloudAuthController extends Controller {
 
@@ -36,8 +38,10 @@ class CloudAuthController extends Controller {
             assert($urlState === null);  // Since we didn't pass anything in start()
 
             // We save $accessToken to make API requests.
-            Auth::user()->accessTokenDropbox = $accessToken;
-            Auth::user()->save();
+            // TODO: check that it user was added before
+            $dropbox = new DropBoxServices();
+            $dropbox->create(['access_token' => $accessToken, 'user_id' => Auth::user()->id]);
+
         }
         catch (dbx\WebAuthException_BadRequest $ex) {
             Log::error("/dropbox-auth-finish: bad request: " . $ex->getMessage());
