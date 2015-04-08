@@ -20,6 +20,7 @@ class CreateGoogleDriveAccessTable extends Migration {
             $table->string('created');
             $table->unsignedInteger('user_id');
             $table->string('uid');//google's user id
+            $table->string('name')->default('Google Drive');
         });
 	}
 

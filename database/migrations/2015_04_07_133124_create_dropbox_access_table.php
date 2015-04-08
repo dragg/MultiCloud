@@ -17,6 +17,7 @@ class CreateDropboxAccessTable extends Migration {
             $table->string('access_token');
             $table->unsignedInteger('user_id');
             $table->string('uid');//dropbox's user id
+            $table->string('name')->default('Dropbox');
         });
 	}
 
