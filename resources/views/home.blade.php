@@ -38,6 +38,20 @@
                         </form>
                     @endforeach
                 </div>
+                <div class="panel-body">
+                    <form action="{{action('Cloud\CloudAuthController@authGoogle')}}">
+                        <button type="submit" class="btn btn-primary">Google</button>
+                    </form>
+                    @foreach(Auth::user()->googleDrives as $gDrive)
+                        <form action="{{action('Cloud\GoogleController@show', ['id' => $gDrive->id])}}">
+                            <button type="submit" class="btn btn-primary">Get user info</button>
+                        </form>
+
+                        <form action="{{action('Cloud\GoogleController@destroy', ['id' => $gDrive->id])}}">
+                            <button type="submit" class="btn btn-primary">Exit from google drive</button>
+                        </form>
+                    @endforeach
+                </div>
 			</div>
 		</div>
 	</div>

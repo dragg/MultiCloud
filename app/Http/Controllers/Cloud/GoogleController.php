@@ -1,5 +1,6 @@
 <?php namespace App\Http\Controllers\Cloud;
 
+use App\GoogleDrive;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -7,6 +8,7 @@ use Illuminate\Http\Request;
 use Google_Service_Drive;
 use Google_Auth_OAuth2;
 use Google_Client;
+use App\Services\GoogleDriveService;
 
 class GoogleController extends Controller {
 
@@ -17,20 +19,7 @@ class GoogleController extends Controller {
 	 */
 	public function index()
 	{
-		$client = new Google_Client();
-        $client->setClientSecret(\Config::get('clouds.google_drive.secret'));
-        $client->setClientId(\Config::get('clouds.google_drive.id'));
 
-        $client->setAccessToken(json_encode([
-            'access_token' => \Auth::user()->accessTokenGoogle,
-            'token_type' => \Auth::user()->token_type_google,
-            'expires_in' => \Auth::user()->expires_in_google,
-            'created' => \Auth::user()->created_google
-        ]));
-
-        $service = new Google_Service_Drive($client);
-
-        return ($service->files->listFiles()->getItems());
 	}
 
 	/**
@@ -61,7 +50,17 @@ class GoogleController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+        $gDrive = GoogleDrive::findOrFail((int)$id);
+        if(\Auth::user()->id === $gDrive->user_id)
+        {
+            $gService = new GoogleDriveService();
+            $auth = new \Google_Service_Oauth2($gService->getClient($gDrive));
+            return (array)$auth->userinfo->get()->toSimpleObject();
+        }
+        else {
+            $response = "Access denied!";
+            return $response;
+        }
 	}
 
 	/**
@@ -92,10 +91,17 @@ class GoogleController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function destroy()
+	public function destroy($id)
 	{
-        \Auth::user()->accessTokenGoogle = null;
-        \Auth::user()->save();
+        $gDrive = GoogleDrive::findOrFail((int)$id);
+        if(\Auth::user()->id === $gDrive->user_id)
+        {
+            $gDrive->delete();
+        }
+        else {
+            $response = "Access denied!";
+            return $response;
+        }
         return redirect('/home');
 	}
 

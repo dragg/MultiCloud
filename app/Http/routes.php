@@ -40,6 +40,6 @@ Route::group(['namespace' => 'Cloud'], function() {
 
     Route::get('/google-auth-finish', 'CloudAuthController@callbackGoogle');
 
-    Route::get('/google-profile', 'GoogleController@index');
-    Route::get('/google-exit', 'GoogleController@destroy');
+    Route::get('/google-profile/{id}', 'GoogleController@show');
+    Route::get('/google-exit/{id}', 'GoogleController@destroy');
 });

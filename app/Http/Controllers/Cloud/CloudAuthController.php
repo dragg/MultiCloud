@@ -15,6 +15,7 @@ use Google_Client;
 use Google_Service_Drive;
 use App\Services\DropBoxServices;
 use App\Services\YandexDiskServices;
+use App\Services\GoogleDriveService;
 
 class CloudAuthController extends Controller {
 
@@ -119,7 +120,9 @@ class CloudAuthController extends Controller {
         //$client->setApplicationName(Config::get('clouds.google_drive.name'));
         $client->setClientSecret(Config::get('clouds.google_drive.secret'));
         $client->setClientId(Config::get('clouds.google_drive.id'));
-        $client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
+        $client->addScope([Google_Service_Drive::DRIVE_METADATA_READONLY,
+            \Google_Service_Oauth2::USERINFO_PROFILE ,
+            \Google_Service_Oauth2::USERINFO_EMAIL]);
         $client->setRedirectUri(Config::get('app.url') . '/google-auth-finish');
         $url = $client->createAuthUrl();
 
@@ -136,13 +139,9 @@ class CloudAuthController extends Controller {
             $client->setRedirectUri(Config::get('app.url') . '/google-auth-finish');
             $accessTokenJSON = $client->authenticate($request->get('code'));
 
-            Log::info($accessTokenJSON);
+            $googleService = new GoogleDriveService();
             $token = json_decode($accessTokenJSON);
-            Auth::user()->accessTokenGoogle = $token->access_token;
-            Auth::user()->token_type_google = $token->token_type;
-            Auth::user()->expires_in_google = $token->expires_in;
-            Auth::user()->created_google = $token->created;
-            Auth::user()->save();
+            $googleService->create(array_merge((array)$token, ['user_id' => Auth::user()->id]));
         }
 
         return redirect('/home');
