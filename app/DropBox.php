@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Dropbox extends Model {
+class DropBox extends Model {
 
     protected $table = 'dropbox_access';
 

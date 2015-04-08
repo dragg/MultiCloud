@@ -24,6 +24,20 @@
                         </form>
                     @endforeach
                 </div>
+                <div class="panel-body">
+                    <form action="{{action('Cloud\CloudAuthController@authYandex')}}">
+                        <button type="submit" class="btn btn-primary">Yandex</button>
+                    </form>
+                    @foreach(Auth::user()->yandexDisks as $yDisk)
+                        <form action="{{action('Cloud\YandexController@show', ['id' => $yDisk->id])}}">
+                            <button type="submit" class="btn btn-primary">Get files</button>
+                        </form>
+
+                        <form action="{{action('Cloud\YandexController@destroy', ['id' => $yDisk->id])}}">
+                            <button type="submit" class="btn btn-primary">Exit from yandex disk</button>
+                        </form>
+                    @endforeach
+                </div>
 			</div>
 		</div>
 	</div>

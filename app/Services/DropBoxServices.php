@@ -1,9 +1,8 @@
 <?php namespace App\Services;
 
-use App\Dropbox;
+use App\DropBox;
 use App\User;
 use Dropbox as dbx;
-use Illuminate\Support\Facades\Log;
 
 class DropBoxServices {
 
@@ -30,6 +29,6 @@ class DropBoxServices {
             }
         }
 
-        return Dropbox::create(array_merge($attributes, ['uid' => $uid]));
+        return DropBox::create(array_merge($attributes, ['uid' => $uid]));
     }
 }

@@ -33,7 +33,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function dropBoxes()
     {
-        return $this->hasMany('App\Dropbox');
+        return $this->hasMany('App\DropBox');
     }
 
     public function yandexDisks()

@@ -16,6 +16,7 @@ class CreateYandexDiskAccessTable extends Migration {
             $table->increments('id');
             $table->string('access_token');
             $table->unsignedInteger('user_id');
+            $table->unsignedInteger('uid');//yandex's user id
         });
 	}
 

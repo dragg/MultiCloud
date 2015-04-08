@@ -33,8 +33,8 @@ Route::group(['namespace' => 'Cloud'], function() {
 
     Route::get('/yandex-auth-finish', 'CloudAuthController@callbackYandex');
 
-    Route::get('/yandex-profile', 'YandexController@index');
-    Route::get('/yandex-exit', 'YandexController@destroy');
+    Route::get('/yandex-profile/{id}', 'YandexController@show');
+    Route::get('/yandex-exit/{id}', 'YandexController@destroy');
 
     Route::get('/google-auth-start', 'CloudAuthController@authGoogle');
 

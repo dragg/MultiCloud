@@ -3,8 +3,10 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\YandexDisk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Yandex\Disk\DiskClient;
 
 class YandexController extends Controller {
@@ -16,30 +18,7 @@ class YandexController extends Controller {
 	 */
 	public function index()
 	{
-        $diskClient = new DiskClient(\Auth::user()->accessTokenYandex);
-        $diskClient->setServiceScheme(DiskClient::HTTPS_SCHEME);
 
-        $dirContent = $diskClient->directoryContents('/');
-
-        //return $dirContent;
-
-        $contents = [];
-        $i = 0;
-        foreach ($dirContent as $dirItem) {
-            if ($dirItem['resourceType'] === 'dir') {
-                $contents[$i++] = 'Directory "' . $dirItem['displayName'] . '" was create ' . date(
-                        'Y-m-d by H:i:s',
-                        strtotime($dirItem['creationDate'])
-                    ) . '<br />';
-            } else {
-                $contents[$i++] = 'File "' . $dirItem['displayName'] . '" with size ' . $dirItem['contentLength'] . ' was create ' . date(
-                        'Y-m-d by H:i:s',
-                        strtotime($dirItem['creationDate'])
-                    ) . '<br />';
-            }
-        }
-
-        return $contents;
 	}
 
 	/**
@@ -70,7 +49,35 @@ class YandexController extends Controller {
 	 */
 	public function show($id)
 	{
-		//
+        $yDisk = YandexDisk::findOrFail((int)$id);
+        if($yDisk->user_id === Auth::user()->id) {
+            $diskClient = new DiskClient(YandexDisk::findOrFail((int)$id)->access_token);
+            $diskClient->setServiceScheme(DiskClient::HTTPS_SCHEME);
+
+            $dirContent = $diskClient->directoryContents('/');
+
+            $contents = [];
+            $i = 0;
+            foreach ($dirContent as $dirItem) {
+                if ($dirItem['resourceType'] === 'dir') {
+                    $contents[$i++] = 'Directory "' . $dirItem['displayName'] . '" was create ' . date(
+                            'Y-m-d by H:i:s',
+                            strtotime($dirItem['creationDate'])
+                        ) . '<br />';
+                } else {
+                    $contents[$i++] = 'File "' . $dirItem['displayName'] . '" with size ' . $dirItem['contentLength'] . ' was create ' . date(
+                            'Y-m-d by H:i:s',
+                            strtotime($dirItem['creationDate'])
+                        ) . '<br />';
+                }
+            }
+
+            $response = $contents;
+        } else {
+            $response = "Access denied!";
+        }
+
+        return $response;
 	}
 
 	/**
@@ -103,9 +110,13 @@ class YandexController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		\Auth::user()->accessTokenYandex = null;
-        \Auth::user()->save();
-        return redirect('/home');
+        $yDisk = YandexDisk::findOrFail((int)$id);
+        if($yDisk->user_id === Auth::user()->id) {
+            $yDisk->delete();
+            return redirect('/home');
+        } else {
+            return $response = "Access denied!";
+        }
 	}
 
 }

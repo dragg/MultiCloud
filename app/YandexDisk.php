@@ -6,6 +6,8 @@ class YandexDisk extends Model {
 
     protected $table = 'yandex_access';
 
-    protected $fillable = ['access_token', 'user_id'];
+    public $timestamps = false;
+
+    protected $fillable = ['access_token', 'user_id', 'uid'];
 
 }

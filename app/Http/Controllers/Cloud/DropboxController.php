@@ -1,6 +1,6 @@
 <?php namespace App\Http\Controllers\Cloud;
 
-use App\Dropbox;
+use App\DropBox;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +49,7 @@ class DropboxController extends Controller {
 	 */
 	public function show($id)
 	{
-        $dropbox = Dropbox::findOrFail((int)$id);
+        $dropbox = DropBox::findOrFail((int)$id);
         if(Auth::user()->id === $dropbox->user_id)
         {
             $client = new dbx\Client($dropbox->access_token, self::$clientIdentifier);
@@ -91,7 +91,7 @@ class DropboxController extends Controller {
 	 */
 	public function destroy($id)
 	{
-        $dropbox = Dropbox::findOrFail((int)$id);
+        $dropbox = DropBox::findOrFail((int)$id);
         if(Auth::user()->id === $dropbox->user_id)
         {
             $client = new dbx\Client($dropbox->access_token, self::$clientIdentifier);

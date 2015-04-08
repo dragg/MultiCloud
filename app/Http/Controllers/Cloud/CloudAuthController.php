@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers\Cloud;
 
-use App\Dropbox;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Dropbox as dbx;
@@ -15,6 +14,7 @@ use Yandex\OAuth\Exception\AuthRequestException;
 use Google_Client;
 use Google_Service_Drive;
 use App\Services\DropBoxServices;
+use App\Services\YandexDiskServices;
 
 class CloudAuthController extends Controller {
 
@@ -38,10 +38,8 @@ class CloudAuthController extends Controller {
             assert($urlState === null);  // Since we didn't pass anything in start()
 
             // We save $accessToken to make API requests.
-            // TODO: check that it user was added before
             $dropbox = new DropBoxServices();
             $dropbox->create(['access_token' => $accessToken, 'user_id' => Auth::user()->id]);
-
         }
         catch (dbx\WebAuthException_BadRequest $ex) {
             Log::error("/dropbox-auth-finish: bad request: " . $ex->getMessage());
@@ -60,10 +58,10 @@ class CloudAuthController extends Controller {
             Log::error("/dropbox-auth-finish: not approved: " . $ex->getMessage());
         }
         catch (dbx\WebAuthException_Provider $ex) {
-            Log::error("/dropbox-auth-finish: error redirect from Dropbox: " . $ex->getMessage());
+            Log::error("/dropbox-auth-finish: error redirect from DropBox: " . $ex->getMessage());
         }
         catch (dbx\Exception $ex) {
-            Log::error("/dropbox-auth-finish: error communicating with Dropbox API: " . $ex->getMessage());
+            Log::error("/dropbox-auth-finish: error communicating with DropBox API: " . $ex->getMessage());
         }
 
         return redirect('/home');
@@ -106,8 +104,8 @@ class CloudAuthController extends Controller {
         // забираем полученный токен
         $token = $client->getAccessToken();
 
-        Auth::user()->accessTokenYandex = $token;
-        Auth::user()->save();
+        $yandex = new YandexDiskServices();
+        $yandex->create(['access_token' => $token, 'user_id' => Auth::user()->id]);
 
         // если вы передавали параметр state, то его можно получить в $_GET['state']
 
