@@ -19,7 +19,7 @@ class CreateGoogleDriveAccessTable extends Migration {
             $table->string('expires_in');
             $table->string('created');
             $table->unsignedInteger('user_id');
-            $table->string('uid');
+            $table->string('uid');//google's user id
         });
 	}
 

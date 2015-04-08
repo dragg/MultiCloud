@@ -21,7 +21,7 @@ class YandexDiskServices {
         $user = User::findOrFail($attributes['user_id']);
 
         foreach($user->yandexDisks as $disk) {
-            if($disk->uid === (int)$uid) {
+            if($disk->uid === $uid) {
                 $disk->access_token = $access_token;
                 $disk->save();
                 return $disk;

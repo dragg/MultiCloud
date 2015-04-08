@@ -22,7 +22,7 @@ class DropBoxServices {
         $user = User::findOrFail($attributes['user_id']);
 
         foreach ($user->dropboxes as $dropbox) {
-            if($dropbox->uid === $uid) {
+            if($dropbox->uid === (string)$uid) {
                 $dropbox->access_token = $access_token;
                 $dropbox->save();
                 return $dropbox;
