@@ -4,3 +4,5 @@
 .idea
 /public/css/*.map
 /public/css/*.css
+/public/components/
+/public/build/
