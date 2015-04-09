@@ -34,7 +34,7 @@ gulp.task('js', function() {
 
 gulp.task('copyindex', function() {
   return gulp.src('./resources/assets/app/index.html')
-    .pipe(rename('layout1.blade.php'))
+    .pipe(rename('layout.blade.php'))
     .pipe(gulp.dest(paths.build.index));
 });
 

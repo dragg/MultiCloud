@@ -6,3 +6,4 @@
 /public/css/*.css
 /public/components/
 /public/build/
+/resources/views/layout.blade.php

@@ -2,25 +2,24 @@
     'use strict';
 
     angular
-        .module('app.feature')
-        .controller('Feature', Feature);
+        .module('app.addCloud')
+        .controller('AddCloud', AddCloud);
 
-    Feature.$inject = [];
+    //AddCloud.$inject = [''];
 
     /* @ngInject */
-    function Feature() {
+    function AddCloud() {
         /* jshint validthis: true */
         var vm = this;
 
         vm.activate = activate;
-        vm.title = 'Feature';
+        vm.title = 'addCloud';
 
         activate();
 
         ////////////////
 
         function activate() {
-
         }
     }
 })();

@@ -1,0 +1,15 @@
+
+<div class="row">
+    <!-- sidebar -->
+    <div class="col-lg-3 col-md-3 col-xs-3 padding-50 nav-clouds">
+        <ul class="nav">
+            <li><a data-ui-sref="clouds.add">Add Cloud</a></li>
+            <li data-ng-repeat="cloud in vm.clouds"><a data-ui-sref="clouds.cloud">{{cloud}}</a></li>
+        </ul>
+    </div>
+
+    <!-- main area -->
+    <div class="col-xs-9 col-sm-9 padding-50" data-ui-view>
+
+    </div><!-- /.col-xs-12 main -->
+</div><!--/.row-->

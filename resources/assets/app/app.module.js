@@ -8,6 +8,8 @@
             /*
              * Feature areas
              */
-            'app.feature'
+            'app.cloudsNavBar',
+            'app.addCloud',
+            'app.cloud'
         ]);
 })();
