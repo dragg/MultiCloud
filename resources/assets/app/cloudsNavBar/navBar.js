@@ -5,10 +5,10 @@
         .module('app.cloudsNavBar')
         .controller('CloudsNavBar', CloudsNavBar);
 
-    CloudsNavBar.$inject = [];
+    CloudsNavBar.$inject = ['CloudsModel'];
 
     /* @ngInject */
-    function CloudsNavBar() {
+    function CloudsNavBar(CloudsModel) {
         /* jshint validthis: true */
         var vm = this;
 
@@ -21,7 +21,8 @@
         ////////////////
 
         function activate() {
-
+            var clouds = CloudsModel.fetch();
+            console.log(clouds);
         }
     }
 })();

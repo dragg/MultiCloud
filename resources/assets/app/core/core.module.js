@@ -6,12 +6,13 @@
             /*
              * Angular modules
              */
-            'ngAnimate',
+            'ngAnimate', 'ngResource',
 
             /*
              * Our reusable cross app code modules
              */
             /*'blocks.exception', 'blocks.logger', 'blocks.router',*/
+            'blocks.cloudsModel',
 
             /*
              * 3rd Party modules

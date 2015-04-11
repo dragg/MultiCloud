@@ -47,3 +47,5 @@ Route::group(['namespace' => 'Cloud'], function() {
     Route::get('/google-profile/{id}', 'GoogleController@show');
     Route::get('/google-exit/{id}', 'GoogleController@destroy');
 });
+
+Route::resource('clouds', 'CloudsController');
