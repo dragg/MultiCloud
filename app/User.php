@@ -31,19 +31,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 */
 	protected $hidden = ['password', 'remember_token'];
 
-    public function dropBoxes()
-    {
-        return $this->hasMany('App\DropBox')->select('id', 'name', 'uid');
-    }
 
-    public function yandexDisks()
+    public function clouds()
     {
-        return $this->hasMany('App\YandexDisk')->select('id', 'name', 'uid');
-    }
-
-    public function googleDrives()
-    {
-        return $this->hasMany('App\GoogleDrive')->select('id', 'name', 'uid');
+        return $this->hasMany('App\Cloud')->select('id', 'type','name', 'uid');
     }
 
 }

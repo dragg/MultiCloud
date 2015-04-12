@@ -1,6 +1,6 @@
 <?php namespace App\Services;
 
-use App\GoogleDrive;
+use App\Cloud;
 use App\User;
 use Illuminate\Support\Facades\Config;
 use Google_Service_Oauth2;
@@ -23,7 +23,8 @@ class GoogleDriveService {
         $uid = $authService->userinfo->get()->id;
         $user = User::findOrFail($attributes['user_id']);
 
-        foreach($user->googleDrives as $drive) {
+        $googleDrives = $user->clouds->where('type', Cloud::GoogleDrive);
+        foreach($googleDrives as $drive) {
             if($drive->uid === $uid) {
                 $drive->access_token = $access_token;
                 $drive->save();
@@ -31,7 +32,7 @@ class GoogleDriveService {
             }
         }
 
-        return GoogleDrive::create(array_merge($attributes, ['uid' => $uid]));
+        return Cloud::create(array_merge($attributes, ['uid' => $uid, 'type' => Cloud::GoogleDrive]));
     }
 
 

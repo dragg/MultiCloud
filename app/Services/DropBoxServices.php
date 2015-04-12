@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use App\DropBox;
+use App\Cloud;
 use App\User;
 use Dropbox as dbx;
 
@@ -21,7 +22,8 @@ class DropBoxServices {
         $uid = $client->getAccountInfo()['uid'];
         $user = User::findOrFail($attributes['user_id']);
 
-        foreach ($user->dropBoxes as $dropbox) {
+        $dropBoxes = $user->clouds->where('type', Cloud::DropBox);
+        foreach ($dropBoxes as $dropbox) {
             if($dropbox->uid === (string)$uid) {
                 $dropbox->access_token = $access_token;
                 $dropbox->save();
@@ -29,6 +31,6 @@ class DropBoxServices {
             }
         }
 
-        return DropBox::create(array_merge($attributes, ['uid' => $uid]));
+        return Cloud::create(array_merge($attributes, ['uid' => $uid, 'type' => Cloud::DropBox]));
     }
 }

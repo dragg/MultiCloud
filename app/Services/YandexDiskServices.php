@@ -1,7 +1,7 @@
 <?php namespace App\Services;
 
+use App\Cloud;
 use App\User;
-use App\YandexDisk;
 use Yandex\Disk\DiskClient;
 
 class YandexDiskServices {
@@ -20,7 +20,8 @@ class YandexDiskServices {
 
         $user = User::findOrFail($attributes['user_id']);
 
-        foreach($user->yandexDisks as $disk) {
+        $yandexDisks = $user->clouds->where('type', Cloud::YandexDisk);
+        foreach($yandexDisks as $disk) {
             if($disk->uid === $uid) {
                 $disk->access_token = $access_token;
                 $disk->save();
@@ -28,7 +29,7 @@ class YandexDiskServices {
             }
         }
 
-        return YandexDisk::create(array_merge($attributes, ['uid' => $uid]));
+        return Cloud::create(array_merge($attributes, ['uid' => $uid, 'type' => Cloud::YandexDisk]));
     }
 
 }

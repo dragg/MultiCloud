@@ -17,17 +17,7 @@ class CloudsController extends Controller {
 	public function index()
 	{
 		$user = \Auth::user();
-        $clouds = [];
-        if($user->dropBoxes->count() != 0) {
-            $clouds = array_merge($clouds, $user->dropBoxes->toArray());
-        }
-        if($user->yandexDisks->count() != 0) {
-            $clouds = array_merge($clouds, $user->yandexDisks->toArray());
-        }
-        if($user->googleDrives->count() != 0) {
-            $clouds = array_merge($clouds, $user->googleDrives->toArray());
-        }
-        return $clouds;
+        return $user->clouds;
 	}
 
 	/**
