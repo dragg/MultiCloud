@@ -8,6 +8,6 @@ class GoogleDrive extends Model {
 
     public $timestamps = false;
 
-    protected $fillable = ['access_token', 'token_type', 'expires_in', 'created', 'user_id', 'uid'];
+    protected $fillable = ['access_token', 'token_type', 'expires_in', 'created', 'user_id', 'uid', 'name'];
 
 }

@@ -21,7 +21,7 @@ class DropBoxServices {
         $uid = $client->getAccountInfo()['uid'];
         $user = User::findOrFail($attributes['user_id']);
 
-        foreach ($user->dropboxes as $dropbox) {
+        foreach ($user->dropBoxes as $dropbox) {
             if($dropbox->uid === (string)$uid) {
                 $dropbox->access_token = $access_token;
                 $dropbox->save();

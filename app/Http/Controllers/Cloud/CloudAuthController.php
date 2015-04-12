@@ -21,8 +21,10 @@ class CloudAuthController extends Controller {
 
     private static $clientIdentifier = "MultiCloudThesis alpha";
 
-	public function authDropbox()
+	public function authDropbox(Request $request)
 	{
+        Session::put('name', $request->get('name'));
+
         $auth = $this->getWebAuth();
         $authorizeUrl = $auth->start();
 
@@ -40,7 +42,8 @@ class CloudAuthController extends Controller {
 
             // We save $accessToken to make API requests.
             $dropbox = new DropBoxServices();
-            $dropbox->create(['access_token' => $accessToken, 'user_id' => Auth::user()->id]);
+            $name = Session::get('name'); Session::forget('name');
+            $dropbox->create(['access_token' => $accessToken, 'user_id' => Auth::user()->id, 'name' => $name]);
         }
         catch (dbx\WebAuthException_BadRequest $ex) {
             Log::error("/dropbox-auth-finish: bad request: " . $ex->getMessage());
@@ -81,17 +84,16 @@ class CloudAuthController extends Controller {
         return new dbx\WebAuth($appInfo, $clientIdentifier, $redirectUri, $csrfTokenStore);
     }
 
-    public function authYandex()
+    public function authYandex(Request $request)
     {
         $client = new OAuthClient(Config::get('clouds.yandex_disk.id'));
-        // сделать редирект и выйти
-        $client->authRedirect(true);
         //Передать в запросе какое-то значение в параметре state, чтобы Yandex в ответе его вернул
-        $state = 'yandex-php-library';
+        $state = $request->get('name');
+        // сделать редирект и выйти
         $client->authRedirect(true, OAuthClient::CODE_AUTH_TYPE, $state);
     }
 
-    public function callbackYandex()
+    public function callbackYandex(Request $request)
     {
         $client = new OAuthClient(Config::get('clouds.yandex_disk.id'), Config::get('clouds.yandex_disk.password'));
 
@@ -106,15 +108,16 @@ class CloudAuthController extends Controller {
         $token = $client->getAccessToken();
 
         $yandex = new YandexDiskServices();
-        $yandex->create(['access_token' => $token, 'user_id' => Auth::user()->id]);
-
-        // если вы передавали параметр state, то его можно получить в $_GET['state']
+        $name = $request->get('state');
+        $yandex->create(['access_token' => $token, 'user_id' => Auth::user()->id, 'name' => $name]);
 
         return redirect('/home');
     }
 
-    public function authGoogle()
+    public function authGoogle(Request $request)
     {
+        Session::put('name', $request->get('name'));
+
         $client = new Google_Client();
 
         //$client->setApplicationName(Config::get('clouds.google_drive.name'));
@@ -141,7 +144,8 @@ class CloudAuthController extends Controller {
 
             $googleService = new GoogleDriveService();
             $token = json_decode($accessTokenJSON);
-            $googleService->create(array_merge((array)$token, ['user_id' => Auth::user()->id]));
+            $name = Session::get('name'); Session::forget('name');
+            $googleService->create(array_merge((array)$token, ['user_id' => Auth::user()->id, 'name' => $name]));
         }
 
         return redirect('/home');

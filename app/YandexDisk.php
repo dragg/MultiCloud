@@ -8,6 +8,6 @@ class YandexDisk extends Model {
 
     public $timestamps = false;
 
-    protected $fillable = ['access_token', 'user_id', 'uid'];
+    protected $fillable = ['access_token', 'user_id', 'uid', 'name'];
 
 }

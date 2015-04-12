@@ -33,17 +33,17 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function dropBoxes()
     {
-        return $this->hasMany('App\DropBox')->select('id', 'name');
+        return $this->hasMany('App\DropBox')->select('id', 'name', 'uid');
     }
 
     public function yandexDisks()
     {
-        return $this->hasMany('App\YandexDisk')->select('id', 'name');
+        return $this->hasMany('App\YandexDisk')->select('id', 'name', 'uid');
     }
 
     public function googleDrives()
     {
-        return $this->hasMany('App\GoogleDrive')->select('id', 'name');
+        return $this->hasMany('App\GoogleDrive')->select('id', 'name', 'uid');
     }
 
 }
