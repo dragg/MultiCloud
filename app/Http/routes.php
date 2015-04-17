@@ -48,4 +48,6 @@ Route::group(['namespace' => 'Cloud'], function() {
     Route::get('/google-exit/{id}', 'GoogleController@destroy');
 });
 
-Route::resource('clouds', 'CloudsController');
+Route::resource('clouds', 'CloudController');
+
+Route::resource('clouds.contents', 'ContentController');

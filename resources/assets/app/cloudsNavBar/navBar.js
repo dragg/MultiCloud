@@ -14,15 +14,13 @@
 
         vm.activate = activate;
         vm.title = 'CloudsNavBar';
-        vm.clouds = ['DropBox', 'YandexDisk', 'GoogleDrive'];
 
         activate();
 
         ////////////////
 
         function activate() {
-            var clouds = CloudsModel.fetch();
-            console.log(clouds);
+            vm.clouds = CloudsModel.fetch();
         }
     }
 })();

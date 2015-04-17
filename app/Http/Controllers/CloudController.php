@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 
-class CloudsController extends Controller {
+class CloudController extends Controller {
 
 	/**
 	 * Display a listing of the resource.

@@ -33,4 +33,16 @@ class DropBoxServices {
 
         return Cloud::create(array_merge($attributes, ['uid' => $uid, 'type' => Cloud::DropBox]));
     }
+
+    public function getContents($path, $access_token)
+    {
+        $contents = [];
+        $client = new \Dropbox\Client($access_token, self::$clientIdentifier);
+
+        $metadata = $client->getMetadataWithChildren($path);
+        foreach($metadata["contents"] as $content) {
+            array_push($contents, [$content['path'], $content['is_dir']]);
+        }
+        return $contents;
+    }
 }
