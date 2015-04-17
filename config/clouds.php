@@ -13,8 +13,8 @@ return [
     ],
 
     'dropbox' => [
-        'key'       => 'sjmd5ly8ea44862',
-        'secret'    => 'btk0tmgxlzfl35z'
+        'key'       => 'uep1augn0ilzl81',
+        'secret'    => '2jud9hnfzfyhflh'
     ],
 
     'google_drive' => [
