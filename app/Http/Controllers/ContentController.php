@@ -4,12 +4,18 @@ use App\Cloud;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Services\DropBoxServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
-    private static $clientIdentifier = "MultiCloudThesis alpha";
+    protected $dropBoxService;
+
+    public function __construct(DropBoxServices $dropBoxServices)
+    {
+        $this->dropBoxService = $dropBoxServices;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -21,15 +27,7 @@ class ContentController extends Controller {
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
         if($cloud->type === Cloud::DropBox) {
-            $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
-
-            $metadata = $client->getMetadataWithChildren("/");
-            $contents = [];
-            foreach($metadata["contents"] as $content) {
-                array_push($contents, [$content['path'], $content['is_dir']]);
-            }
-            return $contents;
-
+            return $this->dropBoxService->getContents($cloudId, '/');
         }
         return [$cloudId];
 	}
@@ -61,9 +59,10 @@ class ContentController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($cloudId, $id)
+	public function show($cloudId, $path, Request $request)
 	{
-        return [$cloudId, $id];
+        $path = str_replace("\\", "/", $path);
+        return $this->dropBoxService->getContents($cloudId, $path);
 	}
 
 	/**

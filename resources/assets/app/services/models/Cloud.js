@@ -2,8 +2,8 @@
     'use strict';
 
     angular
-        .module('blocks.cloudsModel')
-        .factory('CloudsModel', CloudsModel);
+        .module('models')
+        .factory('Cloud', CloudsModel);
 
     CloudsModel.$inject = ['$resource'];
 

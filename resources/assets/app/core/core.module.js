@@ -12,7 +12,7 @@
              * Our reusable cross app code modules
              */
             /*'blocks.exception', 'blocks.logger', 'blocks.router',*/
-            'blocks.cloudsModel',
+            'models', 'filters',
 
             /*
              * 3rd Party modules

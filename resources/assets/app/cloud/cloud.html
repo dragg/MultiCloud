@@ -1,3 +1,7 @@
+<div>
+    Current path: {{vm.path}}
+</div>
+
 <table class="table table-bordered table-container">
     <tbody>
     <tr>
@@ -23,145 +27,27 @@
                 <table class="table" style="margin: 0;">
                     <tr>
                         <td>
+                            <i class="fa fa-arrow-circle-left"></i>
+                        </td>
+                        <td data-ng-click="vm.back()">../</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr data-ng-repeat="content in vm.contents">
+                        <td data-ng-if="content.is_dir">
                             <i class="fa fa-folder"></i>
                         </td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-folder"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
-                    </tr>
-                    <tr>
-                        <td><i class="fa fa-file"></i></td>
-                        <td>Name</td>
-                        <td>Cloud name</td>
-                        <td>Size</td>
-                        <td>Modified date</td>
+                        <td data-ng-if="!content.is_dir">
+                            <i class="fa fa-file"></i>
+                        </td>
+                        <td data-ng-click="vm.changeDirectory(content.name)">{{content.name | contentName}}</td>
+                        <td>{{content.cloud_name}}</td>
+
+                        <td data-ng-if="content.is_dir">-</td>
+                        <td data-ng-if="!content.is_dir">{{content.size}}</td>
+
+                        <td>{{content.modified}}</td>
                     </tr>
                 </table>
             </div>

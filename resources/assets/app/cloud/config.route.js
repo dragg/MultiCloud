@@ -10,7 +10,7 @@
     function getRoutes($stateProvider) {
       $stateProvider
         .state('clouds.cloud', {
-          url: "/cloud",
+          url: "/:cloudId/contents/:path",
           templateUrl: "build/views/cloud/cloud.html",
           controller: "Cloud",
           controllerAs: "vm"
