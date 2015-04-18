@@ -42,16 +42,21 @@ class DropBoxServices {
         $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
 
         $metadata = $client->getMetadataWithChildren($path);
-        foreach($metadata["contents"] as $content) {
-            array_push($contents, [
-                'name' => $content['path'],
-                'is_dir' => $content['is_dir'],
-                'cloud_name' => $cloud->name,
-                'size' => $content['size'],
-                'modified' => $content['modified']
-            ]);
-            Log::info($content);
+
+        if($metadata['is_dir']) {
+            foreach($metadata["contents"] as $content) {
+                array_push($contents, [
+                    'name' => $content['path'],
+                    'is_dir' => $content['is_dir'],
+                    'cloud_name' => $cloud->name,
+                    'size' => $content['size'],
+                    'modified' => $content['modified']
+                ]);
+            }
+        } else {
+            $contents = $client->createTemporaryDirectLink($path);
         }
+
         return $contents;
     }
 }

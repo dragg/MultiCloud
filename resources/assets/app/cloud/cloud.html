@@ -41,7 +41,8 @@
                         <td data-ng-if="!content.is_dir">
                             <i class="fa fa-file"></i>
                         </td>
-                        <td data-ng-click="vm.changeDirectory(content.name)">{{content.name | contentName}}</td>
+                        <td data-ng-if="content.is_dir" data-ng-click="vm.changeDirectory(content.name)">{{content.name | contentName}}</td>
+                        <td data-ng-if="!content.is_dir" data-ng-click="vm.download(content.name)">{{content.name | contentName}}</td>
                         <td>{{content.cloud_name}}</td>
 
                         <td data-ng-if="content.is_dir">-</td>
