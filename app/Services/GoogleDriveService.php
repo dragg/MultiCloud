@@ -7,7 +7,7 @@ use Google_Service_Oauth2;
 use Google_Client;
 use Illuminate\Support\Facades\Log;
 
-class GoogleDriveService {
+class GoogleDriveService extends CloudService {
 
     public function create($attributes)
     {
@@ -60,5 +60,35 @@ class GoogleDriveService {
 
 
         return $client;
+    }
+
+    public function getContents($cloudId, $path)
+    {
+        // TODO: Implement getContents() method.
+    }
+
+    public function removeContent($cloudId, $path)
+    {
+        // TODO: Implement removeContent() method.
+    }
+
+    public function moveContent($cloudId, $path, $newPath)
+    {
+        // TODO: Implement moveContent() method.
+    }
+
+    public function infoCloud($cloudId)
+    {
+        // TODO: Implement infoCloud() method.
+    }
+
+    public function removeCloud($cloudId)
+    {
+        // TODO: Implement removeCloud() method.
+    }
+
+    public function renameCloud($cloudId, $name)
+    {
+        // TODO: Implement renameCloud() method.
     }
 }

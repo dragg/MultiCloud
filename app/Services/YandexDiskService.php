@@ -4,7 +4,7 @@ use App\Cloud;
 use App\User;
 use Yandex\Disk\DiskClient;
 
-class YandexDiskServices {
+class YandexDiskService extends CloudService {
 
     public function create($attributes)
     {
@@ -32,4 +32,33 @@ class YandexDiskServices {
         return Cloud::create(array_merge($attributes, ['uid' => $uid, 'type' => Cloud::YandexDisk]));
     }
 
+    public function getContents($cloudId, $path)
+    {
+        // TODO: Implement getContents() method.
+    }
+
+    public function removeContent($cloudId, $path)
+    {
+        // TODO: Implement removeContent() method.
+    }
+
+    public function moveContent($cloudId, $path, $newPath)
+    {
+        // TODO: Implement moveContent() method.
+    }
+
+    public function infoCloud($cloudId)
+    {
+        // TODO: Implement infoCloud() method.
+    }
+
+    public function removeCloud($cloudId)
+    {
+        // TODO: Implement removeCloud() method.
+    }
+
+    public function renameCloud($cloudId, $name)
+    {
+        // TODO: Implement renameCloud() method.
+    }
 }

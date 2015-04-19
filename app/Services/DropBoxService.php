@@ -6,7 +6,7 @@ use App\User;
 use Dropbox as dbx;
 use Illuminate\Support\Facades\Log;
 
-class DropBoxServices {
+class DropBoxService extends CloudService {
 
     private static $clientIdentifier = "MultiCloudThesis alpha";
 
@@ -37,9 +37,10 @@ class DropBoxServices {
 
     public function getContents($cloudId, $path)
     {
-        $cloud = Cloud::findOrFail((int)$cloudId);
+        $cloud = $this->getCloud($cloudId);
+        $client = $this->getClient($cloudId);
+
         $contents = [];
-        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
 
         $metadata = $client->getMetadataWithChildren($path);
 
@@ -60,25 +61,59 @@ class DropBoxServices {
         return $contents;
     }
 
-    public function remove($cloudId, $path)
+    public function removeContent($cloudId, $path)
     {
-        $cloud = Cloud::findOrFail((int)$cloudId);
-
-        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+        $client = $this->getClient($cloudId);
 
         $response = $client->delete($path);
 
         return $response;
     }
 
-    public function move($cloudId, $path, $newPath)
+    public function moveContent($cloudId, $path, $newPath)
     {
-        $cloud = Cloud::findOrFail((int)$cloudId);
-
-        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+        $client = $this->getClient($cloudId);
 
         $response = $client->move($path, $newPath);
 
         return $response;
+    }
+
+    public function infoCloud($cloudId)
+    {
+        $client = $this->getClient($cloudId);
+
+        $response = $client->getAccountInfo();
+
+        return $response;
+    }
+
+    public function removeCloud($cloudId)
+    {
+        $cloud = $this->getCloud($cloudId);
+        $client = $this->getClient($cloudId);
+
+        $client->disableAccessToken();
+        $cloud->delete();
+    }
+
+    private function getClient($cloudId)
+    {
+        $cloud = $this->getCloud($cloudId);
+
+        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+
+        return $client;
+    }
+
+    private function getCloud($cloudId)
+    {
+        $cloud = Cloud::findOrFail((int)$cloudId);
+        return $cloud;
+    }
+
+    public function renameCloud($cloudId, $name)
+    {
+        // TODO: Implement renameCloud() method.
     }
 }
