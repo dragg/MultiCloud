@@ -13,8 +13,8 @@ use Yandex\OAuth\OAuthClient;
 use Yandex\OAuth\Exception\AuthRequestException;
 use Google_Client;
 use Google_Service_Drive;
-use App\Services\DropBoxServices;
-use App\Services\YandexDiskServices;
+use App\Services\DropBoxService;
+use App\Services\YandexDiskService;
 use App\Services\GoogleDriveService;
 
 class CloudAuthController extends Controller {
@@ -41,7 +41,7 @@ class CloudAuthController extends Controller {
             assert($urlState === null);  // Since we didn't pass anything in start()
 
             // We save $accessToken to make API requests.
-            $dropbox = new DropBoxServices();
+            $dropbox = new DropBoxService();
             $name = Session::get('name'); Session::forget('name');
             $dropbox->create(['access_token' => $accessToken, 'user_id' => Auth::user()->id, 'name' => $name]);
         }
@@ -107,7 +107,7 @@ class CloudAuthController extends Controller {
         // забираем полученный токен
         $token = $client->getAccessToken();
 
-        $yandex = new YandexDiskServices();
+        $yandex = new YandexDiskService();
         $name = $request->get('state');
         $yandex->create(['access_token' => $token, 'user_id' => Auth::user()->id, 'name' => $name]);
 

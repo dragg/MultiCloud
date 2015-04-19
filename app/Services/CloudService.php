@@ -1,5 +1,6 @@
 <?php namespace App\Services;
 
+use App\Cloud;
 
 abstract class CloudService {
 
@@ -10,7 +11,22 @@ abstract class CloudService {
     abstract public function create($attributes);
     abstract public function infoCloud($cloudId);
     abstract public function removeCloud($cloudId);
-    abstract public function renameCloud($cloudId, $name);
 
+    public function renameCloud($cloudId, $name)
+    {
+        $cloud = $this->getCloud($cloudId);
+
+        $cloud->name = $name;
+        $cloud->save();
+
+        return $cloud;
+    }
+
+    protected function getCloud($cloudId)
+    {
+        //need catch exception
+        $cloud = Cloud::findOrFail((int)$cloudId);
+        return $cloud;
+    }
 
 }

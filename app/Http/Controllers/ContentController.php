@@ -4,7 +4,7 @@ use App\Cloud;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Services\DropBoxServices;
+use App\Services\DropBoxService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -12,9 +12,9 @@ class ContentController extends Controller {
 
     protected $dropBoxService;
 
-    public function __construct(DropBoxServices $dropBoxServices)
+    public function __construct(DropBoxService $dropBoxService)
     {
-        $this->dropBoxService = $dropBoxServices;
+        $this->dropBoxService = $dropBoxService;
     }
 
 	/**
@@ -92,7 +92,7 @@ class ContentController extends Controller {
         $cloud = Cloud::findOrFail((int)$cloudId);
         if($cloud->type === Cloud::DropBox) {
             $path = $this->preparePath($path);
-            $response = $this->dropBoxService->move($cloudId, $path, $request->get('newPath'));
+            $response = $this->dropBoxService->moveContent($cloudId, $path, $request->get('newPath'));
             return $response;
         }
 
@@ -111,7 +111,7 @@ class ContentController extends Controller {
         $cloud = Cloud::findOrFail((int)$cloudId);
         if($cloud->type === Cloud::DropBox) {
             $path = $this->preparePath($path);
-            $response = $this->dropBoxService->remove($cloudId, $path);
+            $response = $this->dropBoxService->removeContent($cloudId, $path);
             return $response;
         }
 		return 'I don\'t can remove files from not dropbox';

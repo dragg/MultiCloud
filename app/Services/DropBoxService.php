@@ -106,14 +106,4 @@ class DropBoxService extends CloudService {
         return $client;
     }
 
-    private function getCloud($cloudId)
-    {
-        $cloud = Cloud::findOrFail((int)$cloudId);
-        return $cloud;
-    }
-
-    public function renameCloud($cloudId, $name)
-    {
-        // TODO: Implement renameCloud() method.
-    }
 }

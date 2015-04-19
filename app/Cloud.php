@@ -1,6 +1,6 @@
 <?php namespace App;
 
-use App\Services\DropBoxServices;
+use App\Services\DropBoxService;
 use Illuminate\Database\Eloquent\Model;
 
 class Cloud extends Model {
@@ -25,11 +25,14 @@ class Cloud extends Model {
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
     protected static $dropBoxServices;
 
-    private static $clientIdentifier = "MultiCloudThesis alpha";
-
-    public function __construct(array $attributes = array(), DropBoxServices $dropBoxServices = null)
+    public function __construct(array $attributes = array(), DropBoxService $dropBoxServices = null)
     {
         parent::__construct($attributes);
         self::$dropBoxServices = $dropBoxServices;

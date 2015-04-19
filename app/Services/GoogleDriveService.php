@@ -87,8 +87,4 @@ class GoogleDriveService extends CloudService {
         // TODO: Implement removeCloud() method.
     }
 
-    public function renameCloud($cloudId, $name)
-    {
-        // TODO: Implement renameCloud() method.
-    }
 }

@@ -34,7 +34,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function clouds()
     {
-        return $this->hasMany('App\Cloud')->select('id', 'type','name', 'uid');
+        return $this->hasMany('App\Cloud')->select('id', 'type', 'name', 'uid');
     }
 
 }
