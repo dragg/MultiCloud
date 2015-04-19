@@ -5,7 +5,15 @@
         .module('filters')
         .filter('contentName', function() {
              return function(name) {
-                 return name.substring(name.lastIndexOf('\/') + 1);
+                 var response = name;
+                 if(name !== undefined && name !== null) {
+                     var index = name.lastIndexOf('\/');
+
+                     if(index !== -1) {
+                         response = name.substring(index + 1);
+                     }
+                 }
+                 return response;
              }
         });
 })();
