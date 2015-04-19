@@ -70,4 +70,15 @@ class DropBoxServices {
 
         return $response;
     }
+
+    public function move($cloudId, $path, $newPath)
+    {
+        $cloud = Cloud::findOrFail((int)$cloudId);
+
+        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+
+        $response = $client->move($path, $newPath);
+
+        return $response;
+    }
 }

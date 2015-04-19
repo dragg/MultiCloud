@@ -5,19 +5,24 @@
 <div class="actions">
     <div data-ng-if="vm.isFile">
         <a data-ng-click="vm.download()"><i class="fa fa-download">Download</i></a>
-        <a data-ng-click="vm.rename()"><i class="fa fa-pencil-square-o">Rename</i></a>
+        <a data-ng-click="vm.renameForm()"><i class="fa fa-pencil-square-o">Rename</i></a>
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
         <a data-ng-click="vm.properties()"><i class="fa fa-bars">Properties</i></a>
-
         <a data-ng-click="vm.move()"><i class="fa fa-scissors">Move</i></a>
     </div>
-    <div data-ng-if="vm.isFolder">
+    <div data-ng-show="vm.isFolder">
         <a data-ng-click="vm.openFolder()"><i class="fa fa-folder-open">Open</i></a>
+        <a data-ng-click="vm.renameForm()"><i class="fa fa-pencil-square-o">Rename</i></a>
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
     </div>
     <div data-ng-if="vm.isMulti">
         is many files as maybe files and folders together
     </div>
+    <form data-ng-if="vm.isFolder || vm.isFile" data-ng-show="vm.openRenameForm" data-ng-submit="vm.rename(newPath)" novalidate name="renameForm" data-ng-init="newPath = (vm.selectedContents[0].name | contentName)">
+        <input type="text" data-ng-model="newPath">
+        <button type="submit">Submit</button>
+        <button type="button" data-ng-click="vm.renameForm()">Cancel</button>
+    </form>
 </div>
 
 <table class="table table-bordered table-container">

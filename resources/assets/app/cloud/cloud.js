@@ -21,6 +21,7 @@
         vm.isSelectFile = false;
         vm.isSelectFolder = false;
         vm.isMulti = false;
+        vm.openRenameForm = false;
 
         //vm.activate = init;
         vm.select = select;
@@ -29,6 +30,7 @@
         vm.openFolder = changeDirectory;
         vm.download = download;
         vm.rename = rename;
+        vm.renameForm = renameForm;
         vm.remove = remove;
         vm.properties = properties;
         vm.move = move;
@@ -46,6 +48,8 @@
         }
 
         function select(path) {
+            reset();
+
             var index = vm.selectedContents.indexOf(path);
             if (index === -1) {
                 vm.selectedContents.push(path);
@@ -94,8 +98,15 @@
             });
         }
 
-        function rename() {
-            console.log('rename');
+        function renameForm() {
+            vm.openRenameForm = vm.openRenameForm ? false: true;
+        }
+
+        function rename(newName) {
+            var path = convertPath(vm.selectedContents[0].name);
+            return Content.rename(cloudId, path, vm.path + '/' + newName).then(function(data) {
+                init();
+            });
         }
 
         function remove() {
@@ -119,6 +130,10 @@
 
         function convertPath(path) {
             return path.replace(/\//g, '\\');
+        }
+
+        function reset() {
+            vm.openRenameForm = false;
         }
     }
 })();

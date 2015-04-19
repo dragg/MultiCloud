@@ -34,7 +34,8 @@ class ContentController extends Controller {
 
 	/**
 	 * Show the form for creating a new resource.
-	 *
+     *
+     * @param  int  $cloudId
 	 * @return Response
 	 */
 	public function create($cloudId)
@@ -55,36 +56,47 @@ class ContentController extends Controller {
 
 	/**
 	 * Display the specified resource.
+     *
      * @param  int  $cloudId
 	 * @param  int  $path
 	 * @return Response
 	 */
-	public function show($cloudId, $path, Request $request)
+	public function show($cloudId, $path)
 	{
-        $path = str_replace("\\", "/", $path);
+        $path = $this->preparePath($path);
         return $this->dropBoxService->getContents($cloudId, $path);
 	}
 
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  int  $id
+     * @param  int  $cloudId
+     * @param  int  $path
 	 * @return Response
 	 */
-	public function edit($cloudId, $id)
+	public function edit($cloudId, $path)
 	{
-        return [$cloudId, $id];
+        return [$cloudId, $path];
 	}
 
 	/**
 	 * Update the specified resource in storage.
 	 *
-	 * @param  int  $id
+     * @param  Request $request
+     * @param  int  $cloudId
+     * @param  int  $path
 	 * @return Response
 	 */
-	public function update($cloudId, $id)
+	public function update(Request $request, $cloudId, $path)
 	{
-        return [$cloudId, $id];
+        $cloud = Cloud::findOrFail((int)$cloudId);
+        if($cloud->type === Cloud::DropBox) {
+            $path = $this->preparePath($path);
+            $response = $this->dropBoxService->move($cloudId, $path, $request->get('newPath'));
+            return $response;
+        }
+
+        return [$cloudId, $path];
 	}
 
 	/**
@@ -98,11 +110,16 @@ class ContentController extends Controller {
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
         if($cloud->type === Cloud::DropBox) {
-            $path = str_replace("\\", "/", $path);
+            $path = $this->preparePath($path);
             $response = $this->dropBoxService->remove($cloudId, $path);
             return $response;
         }
 		return 'I don\'t can remove files from not dropbox';
 	}
 
+
+    private function preparePath($path)
+    {
+        return str_replace("\\", "/", $path);
+    }
 }
