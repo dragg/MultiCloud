@@ -46,8 +46,10 @@
             var index = vm.selectedContents.indexOf(path);
             if (index === -1) {
                 vm.selectedContents.push(path);
+                path.selected = true;
             } else {
                 vm.selectedContents.splice(index, 1);
+                path.selected = false;
             }
 
             setSelectedState();

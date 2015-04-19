@@ -51,7 +51,7 @@
                         <td>-</td>
                         <td>-</td>
                     </tr>
-                    <tr data-ng-repeat="content in vm.contents">
+                    <tr data-ng-repeat="content in vm.contents" data-ng-class="{active: content.selected}">
                         <td data-ng-if="content.is_dir">
                             <i class="fa fa-folder"></i>
                         </td>
