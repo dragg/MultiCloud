@@ -4,7 +4,7 @@
     <div class="col-lg-3 col-md-3 col-xs-3 padding-50 nav-clouds">
         <ul class="nav">
             <li><a data-ui-sref="clouds.add">Add Cloud</a></li>
-            <li data-ng-repeat="cloud in vm.clouds"><a data-ui-sref="clouds.cloud({cloudId: cloud.id, path: '/'})">{{cloud.name}}</a></li>
+            <li data-ng-repeat="cloud in vm.clouds"><a data-ui-sref="clouds.cloud({cloudId: cloud.id})">{{cloud.name}}</a></li>
         </ul>
     </div>
 

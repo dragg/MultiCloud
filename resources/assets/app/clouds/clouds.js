@@ -2,18 +2,18 @@
     'use strict';
 
     angular
-        .module('app.cloudsNavBar')
-        .controller('CloudsNavBar', CloudsNavBar);
+        .module('app.clouds')
+        .controller('Clouds', Clouds);
 
-    CloudsNavBar.$inject = ['Cloud'];
+    Clouds.$inject = ['Cloud'];
 
     /* @ngInject */
-    function CloudsNavBar(Cloud) {
+    function Clouds(Cloud) {
         /* jshint validthis: true */
         var vm = this;
 
         vm.activate = activate;
-        vm.title = 'CloudsNavBar';
+        vm.title = 'Clouds';
 
         activate();
 

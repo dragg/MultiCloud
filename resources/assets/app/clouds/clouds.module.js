@@ -2,5 +2,5 @@
     'use strict';
 
     angular
-        .module('app.cloudsNavBar', []);
+        .module('app.clouds', []);
 })();

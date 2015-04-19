@@ -1,0 +1,82 @@
+<div>
+    Current path: {{vm.path}}
+</div>
+
+<div class="actions">
+    <div data-ng-if="vm.isFile">
+        <a data-ng-click="vm.download()"><i class="fa fa-download">Download</i></a>
+        <a data-ng-click="vm.renameForm()"><i class="fa fa-pencil-square-o">Rename</i></a>
+        <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
+        <a data-ng-click="vm.properties()"><i class="fa fa-bars">Properties</i></a>
+        <a data-ng-click="vm.move()"><i class="fa fa-scissors">Move</i></a>
+    </div>
+    <div data-ng-show="vm.isFolder">
+        <a data-ng-click="vm.openFolder()"><i class="fa fa-folder-open">Open</i></a>
+        <a data-ng-click="vm.renameForm()"><i class="fa fa-pencil-square-o">Rename</i></a>
+        <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
+    </div>
+    <div data-ng-if="vm.isMulti">
+        <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
+    </div>
+    <form data-ng-if="vm.isFolder || vm.isFile" data-ng-show="vm.openRenameForm" data-ng-submit="vm.rename(newPath)" novalidate name="renameForm" data-ng-init="newPath = (vm.selectedContents[0].name | contentName)">
+        <input type="text" data-ng-model="newPath">
+        <button type="submit">Submit</button>
+        <button type="button" data-ng-click="vm.renameForm()">Cancel</button>
+    </form>
+</div>
+
+<table class="table table-bordered table-container">
+    <tbody>
+    <tr>
+        <td style="border: 0; padding: 0;">
+            <div>
+                <table class="table" style="margin: 0;">
+                    <tr>
+                        <td>
+                            <i class="fa fa-folder-open-o"></i>
+                        </td>
+                        <td>Name</td>
+                        <td>Cloud name</td>
+                        <td>Size</td>
+                        <td>Modified date</td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td style="border: 0; padding: 0;">
+            <div class="scroll-container">
+                <table class="table" style="margin: 0;">
+                    <tr>
+                        <td>
+                            <i class="fa fa-arrow-circle-left"></i>
+                        </td>
+                        <td data-ng-click="vm.back()">../</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr data-ng-repeat="content in vm.contents" data-ng-class="{active: content.selected}">
+                        <td data-ng-if="content.is_dir">
+                            <i class="fa fa-folder"></i>
+                        </td>
+                        <td data-ng-if="!content.is_dir">
+                            <i class="fa fa-file"></i>
+                        </td>
+                        <td data-ng-if="content.is_dir" data-ng-click="vm.select(content)">{{content.name | contentName}}</td>
+                        <td data-ng-if="!content.is_dir" data-ng-click="vm.select(content)">{{content.name | contentName}}</td>
+                        <td>{{content.cloud_name}}</td>
+
+                        <td data-ng-if="content.is_dir">-</td>
+                        <td data-ng-if="!content.is_dir">{{content.size}}</td>
+
+                        <td>{{content.modified}}</td>
+                    </tr>
+                </table>
+            </div>
+        </td>
+    </tr>
+
+    </tbody>
+</table>

@@ -2,7 +2,7 @@
    'use strict';
 
     angular
-        .module('app.cloudsNavBar')
+        .module('app.clouds')
         .config(getRoutes);
 
     getRoutes.$inject = ['$stateProvider'];
@@ -11,8 +11,8 @@
       $stateProvider
         .state('clouds', {
           url: "/clouds",
-          templateUrl: "build/views/cloudsNavBar/navBar.html",
-          controller: "CloudsNavBar",
+          templateUrl: "build/views/clouds/clouds.html",
+          controller: "Clouds",
           controllerAs: "vm"
         });
     }
