@@ -12,17 +12,20 @@
         var content = $resource('/clouds/:cloudId/contents/:contentPath',
                 {id: '@cloudId', path: '@contentPath'}),
             service = {
-            fetch: fetch
-        };
+                fetch: fetch,
+                remove: remove
+            };
 
         return service;
 
         ////////////////
 
         function fetch(cloudId, path) {
-            return content.query({cloudId: cloudId, contentPath: path}).$promise.then(function(data){
-                return data;
-            });
+            return content.query({cloudId: cloudId, contentPath: path}).$promise;
+        }
+
+        function remove(cloudId, path) {
+            return content.remove({cloudId: cloudId, contentPath: path}).$promise;
         }
     }
 })();

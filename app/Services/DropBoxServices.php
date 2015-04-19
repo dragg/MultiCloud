@@ -59,4 +59,15 @@ class DropBoxServices {
 
         return $contents;
     }
+
+    public function remove($cloudId, $path)
+    {
+        $cloud = Cloud::findOrFail((int)$cloudId);
+
+        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+
+        $response = $client->delete($path);
+
+        return $response;
+    }
 }

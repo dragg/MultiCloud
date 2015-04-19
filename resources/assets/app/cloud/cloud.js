@@ -40,6 +40,9 @@
 
         function init() {
             fetch(vm.path);
+
+            vm.selectedContents = [];
+            setSelectedState();
         }
 
         function select(path) {
@@ -83,9 +86,9 @@
         }
 
         function download() {
-            var path = vm.selectedContents[0].name;
+            var path = convertPath(vm.selectedContents[0].name);
 
-            return Content.fetch(cloudId, path.replace(/\//g, '\\')).then(function (data) {
+            return Content.fetch(cloudId, path).then(function (data) {
                 window.open(data[0]);
                 return data;
             });
@@ -96,7 +99,14 @@
         }
 
         function remove() {
-            console.log('remove');
+            var path = convertPath(vm.selectedContents[0].name);
+            return Content.remove(cloudId, path).then(function(data) {
+                if(data.is_deleted === true) {
+                    init();
+                } else {
+                    console.log('Error');
+                }
+            });
         }
 
         function properties() {
@@ -105,6 +115,10 @@
 
         function move() {
             console.log('move');
+        }
+
+        function convertPath(path) {
+            return path.replace(/\//g, '\\');
         }
     }
 })();

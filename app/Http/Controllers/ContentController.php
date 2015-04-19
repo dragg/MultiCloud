@@ -56,7 +56,7 @@ class ContentController extends Controller {
 	/**
 	 * Display the specified resource.
      * @param  int  $cloudId
-	 * @param  int  $id
+	 * @param  int  $path
 	 * @return Response
 	 */
 	public function show($cloudId, $path, Request $request)
@@ -90,12 +90,19 @@ class ContentController extends Controller {
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  int  $id
+	 * @param  int  $path
+     * @param  int  $cloudId
 	 * @return Response
 	 */
-	public function destroy($cloudId, $id)
+	public function destroy($cloudId, $path)
 	{
-		return [$cloudId, $id];
+        $cloud = Cloud::findOrFail((int)$cloudId);
+        if($cloud->type === Cloud::DropBox) {
+            $path = str_replace("\\", "/", $path);
+            $response = $this->dropBoxService->remove($cloudId, $path);
+            return $response;
+        }
+		return 'I don\'t can remove files from not dropbox';
 	}
 
 }
