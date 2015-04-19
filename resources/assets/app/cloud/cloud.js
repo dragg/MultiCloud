@@ -110,13 +110,15 @@
         }
 
         function remove() {
-            var path = convertPath(vm.selectedContents[0].name);
-            return Content.remove(cloudId, path).then(function(data) {
-                if(data.is_deleted === true) {
-                    init();
-                } else {
-                    console.log('Error');
-                }
+            vm.selectedContents.forEach(function(content) {
+                var path = convertPath(content.name);
+                return Content.remove(cloudId, path).then(function(data) {
+                    if(data.is_deleted === true) {
+                        init();
+                    } else {
+                        console.log('Error by removing ' + path);
+                    }
+                });
             });
         }
 
