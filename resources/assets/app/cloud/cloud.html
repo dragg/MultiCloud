@@ -1,7 +1,31 @@
 <div data-ng-show="'clouds.cloud' | isState">
-
+    <h3>{{vm.cloudInfo.cloud.name}}</h3>
 
     <a data-ui-sref="clouds.cloud.contents({path: '/'})">Go to root</a>
+
+    <button type="button" data-ng-click="vm.remove()">Remove</button>
+    <button type="button" data-ng-click="vm.renameForm()">Rename</button>
+    <button type="button" data-ng-click="vm.properties()">Show properties</button>
+
+    <div data-ng-show="vm.showProperties">
+        <p>
+            Your cloud's name: {{vm.info.name}}
+        </p>
+        <p>
+            Your cloud's login: {{vm.info.login}}
+        </p>
+        <p>
+            Used {{vm.info.used}} from {{vm.info.available}} available space.
+        </p>
+    </div>
+
+    <div data-ng-show="vm.showRenameForm">
+        <form novalidate data-ng-submit="vm.rename(vm.name)">
+            <input data-ng-model="vm.name" value="{{vm.name}}">
+            <button type="submit">Submit</button>
+            <button type="reset" data-ng-click="vm.resetRenameForm()">Reset</button>
+        </form>
+    </div>
 </div>
 
 <div data-ui-view></div>
