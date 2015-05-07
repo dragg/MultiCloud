@@ -51,7 +51,10 @@ class YandexDiskService extends CloudService {
 
     public function moveContent($cloudId, $path, $newPath)
     {
-        // TODO: Implement moveContent() method.
+        $client = $this->getClient($cloudId);
+        //$client->uploadFile()
+
+        return $client->move($path, $newPath) ? 'true' : 'false';
     }
 
     public function infoCloud($cloudId)

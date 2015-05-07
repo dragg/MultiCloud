@@ -104,7 +104,7 @@
 
         function rename(newName) {
             var path = convertPath(vm.selectedContents[0].path);
-            return Content.rename(cloudId, path, vm.path + '/' + newName).then(function(data) {
+            return Content.rename(cloudId, path, getPath() + newName).then(function(data) {
                 init();
             });
         }
@@ -144,6 +144,10 @@
           return path.slice(0, last);
         }
         return path;
+      }
+
+      function getPath() {
+        return (vm.path !== '/') ? (vm.path + '/') : ('/');
       }
     }
 })();

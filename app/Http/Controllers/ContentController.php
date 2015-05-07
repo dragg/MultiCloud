@@ -121,13 +121,20 @@ class ContentController extends Controller {
 	public function update(Request $request, $cloudId, $path)
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
+        $path = $this->preparePath($path);
+
         if($cloud->type === Cloud::DropBox) {
-            $path = $this->preparePath($path);
             $response = $this->dropBoxService->moveContent($cloudId, $path, $request->get('newPath'));
-            return $response;
+
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->moveContent($cloudId, $path, $request->get('newPath'));
+        }
+        else {
+            $response = [$cloudId, $path];
         }
 
-        return [$cloudId, $path];
+        return $response;
 	}
 
 	/**
