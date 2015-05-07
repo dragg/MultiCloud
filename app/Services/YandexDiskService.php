@@ -2,6 +2,7 @@
 
 use App\Cloud;
 use App\User;
+use Illuminate\Support\Facades\Log;
 use Yandex\Disk\DiskClient;
 
 class YandexDiskService extends CloudService {
@@ -34,7 +35,11 @@ class YandexDiskService extends CloudService {
 
     public function getContents($cloudId, $path)
     {
-        // TODO: Implement getContents() method.
+        $client = $this->getClient($cloudId);
+
+        $contents = $client->directoryContents($path);
+
+        return $contents;
     }
 
     public function removeContent($cloudId, $path)
