@@ -64,14 +64,14 @@
                         <td data-ng-if="!content.is_dir">
                             <i class="fa fa-file"></i>
                         </td>
-                        <td data-ng-if="content.is_dir" data-ng-click="vm.select(content)">{{content.name | contentName}}</td>
-                        <td data-ng-if="!content.is_dir" data-ng-click="vm.select(content)">{{content.name | contentName}}</td>
+                        <td data-ng-if="content.is_dir" data-ng-click="vm.select(content)">{{content.path | contentName}}</td>
+                        <td data-ng-if="!content.is_dir" data-ng-click="vm.select(content)">{{content.path | contentName}}</td>
                         <td>{{content.cloud_name}}</td>
 
                         <td data-ng-if="content.is_dir">-</td>
                         <td data-ng-if="!content.is_dir">{{content.size}}</td>
 
-                        <td>{{content.modified}}</td>
+                        <td>{{content.updated_at}}</td>
                     </tr>
                 </table>
             </div>

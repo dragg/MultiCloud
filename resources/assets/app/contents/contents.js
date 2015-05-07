@@ -82,7 +82,7 @@
         }
 
         function changeDirectory() {
-            openFolder(vm.selectedContents[0].name);
+            openFolder(vm.selectedContents[0].path);
         }
 
         function back() {
@@ -90,7 +90,7 @@
         }
 
         function download() {
-            var path = convertPath(vm.selectedContents[0].name);
+            var path = convertPath(vm.selectedContents[0].path);
 
             return Content.fetch(cloudId, path).then(function (data) {
                 window.open(data[0]);
@@ -103,7 +103,7 @@
         }
 
         function rename(newName) {
-            var path = convertPath(vm.selectedContents[0].name);
+            var path = convertPath(vm.selectedContents[0].path);
             return Content.rename(cloudId, path, vm.path + '/' + newName).then(function(data) {
                 init();
             });
@@ -111,7 +111,7 @@
 
         function remove() {
             vm.selectedContents.forEach(function(content) {
-                var path = convertPath(content.name);
+                var path = convertPath(content.path);
                 return Content.remove(cloudId, path).then(function(data) {
                     if(data.is_deleted === true) {
                         init();

@@ -2,12 +2,10 @@
 
 use App\Cloud;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
+use App\Services\ContentService;
 use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
@@ -15,10 +13,15 @@ class ContentController extends Controller {
 
     protected $yandexDiskService;
 
-    public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService)
+    protected $contentService;
+
+    public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService,
+                                ContentService $contentService)
     {
         $this->dropBoxService = $dropBoxService;
         $this->yandexDiskService = $yandexDiskService;
+
+        $this->contentService = $contentService;
     }
 
 	/**
@@ -79,6 +82,8 @@ class ContentController extends Controller {
         elseif($cloud->type === Cloud::YandexDisk) {
             $contents = $this->yandexDiskService->getContents($cloudId, $path);
         }
+
+        $contents = $this->contentService->getContents($contents, $cloud->type);
 
         return $contents;
 	}
