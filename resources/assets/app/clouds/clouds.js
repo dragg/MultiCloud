@@ -1,26 +1,36 @@
 (function () {
-    'use strict';
+  'use strict';
 
-    angular
-        .module('app.clouds')
-        .controller('Clouds', Clouds);
+  angular
+    .module('app.clouds')
+    .controller('Clouds', Clouds);
 
-    Clouds.$inject = ['Cloud'];
+  Clouds.$inject = ['CloudModel', '$state', '$scope'];
 
-    /* @ngInject */
-    function Clouds(Cloud) {
-        /* jshint validthis: true */
-        var vm = this;
+  /* @ngInject */
+  function Clouds(CloudModel, $state, $scope) {
+    /* jshint validthis: true */
+    var vm = this;
 
-        vm.activate = activate;
-        vm.title = 'Clouds';
+    vm.activate = activate;
+    vm.refresh = refresh;
+    vm.title = 'Clouds';
+    vm.needReload = false;
 
-        activate();
+    activate();
 
-        ////////////////
+    ////////////////
 
-        function activate() {
-            vm.clouds = Cloud.fetch();
-        }
+    function activate() {
+      vm.refresh();
     }
+
+    function refresh() {
+      CloudModel.fetch().$promise
+        .then(function (clouds) {
+          vm.clouds = clouds;
+        });
+    }
+
+  }
 })();

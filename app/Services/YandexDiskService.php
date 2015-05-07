@@ -49,12 +49,47 @@ class YandexDiskService extends CloudService {
 
     public function infoCloud($cloudId)
     {
-        // TODO: Implement infoCloud() method.
+        $client = $this->getClient($cloudId);
+
+        $userInfo = $this->prepareData($client->getLogin());
+        $diskInfo = $client->diskSpaceInfo();
+
+        $diskInfo['login'] = $userInfo['login'];
+        $diskInfo['name'] = $userInfo['fio'];
+
+        return $diskInfo;
     }
 
     public function removeCloud($cloudId)
     {
-        // TODO: Implement removeCloud() method.
+        $cloud = $this->getCloud($cloudId);
+
+        //We can't disable access token because we only delete from DB
+        $cloud->delete();
     }
 
+    private function getClient($cloudId)
+    {
+        $cloud = $this->getCloud($cloudId);
+
+        $client = new \Yandex\Disk\DiskClient($cloud->access_token);
+
+        return $client;
+    }
+
+    private function prepareData($data) {
+        $response = [];
+        $data = explode("\n", $data);
+
+        foreach ($data as $item) {
+            $list = explode(":", $item);
+            if(array_key_exists(1, $list)) {
+                $response[$list[0]] = $list[1];
+            } else {
+                array_push($response, $list[0]);
+            }
+        }
+
+        return $response;
+    }
 }

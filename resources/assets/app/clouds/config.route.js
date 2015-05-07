@@ -13,7 +13,7 @@
           url: "/clouds",
           templateUrl: "build/views/clouds/clouds.html",
           controller: "Clouds",
-          controllerAs: "vm"
+          controllerAs: "cloudsCtrl"
         });
     }
 })();

@@ -79,12 +79,15 @@ class GoogleDriveService extends CloudService {
 
     public function infoCloud($cloudId)
     {
-        // TODO: Implement infoCloud() method.
+        //$client = $this->getClient($cloudId);
     }
 
     public function removeCloud($cloudId)
     {
-        // TODO: Implement removeCloud() method.
-    }
+        $cloud = $this->getCloud($cloudId);
+        //$client = $this->getClient($cloudId);
 
+        //$client->revokeToken();
+        $cloud->delete();
+    }
 }

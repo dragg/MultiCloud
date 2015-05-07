@@ -58,6 +58,7 @@ class CloudController extends Controller {
         elseif ($cloud->type === Cloud::YandexDisk) {
             $response = $this->yandexDiskService->infoCloud($id);
         }
+        $response["cloud"] = $cloud;
         return $response;
 	}
 
@@ -93,7 +94,7 @@ class CloudController extends Controller {
 	 */
 	public function destroy($id)
 	{
-        $response = [];
+        $response = 'ok';
 		$cloud = $this->getCloud($id);
         if($cloud->type === Cloud::DropBox) {
             $this->dropBoxService->removeCloud($id);
