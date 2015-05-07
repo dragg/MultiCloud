@@ -78,7 +78,7 @@
         }
 
         function openFolder(path) {
-            $state.go('clouds.cloud.contents', {path: path});
+            $state.go('clouds.cloud.contents', {path: removeSlash(path)});
         }
 
         function changeDirectory() {
@@ -137,5 +137,13 @@
         function reset() {
             vm.openRenameForm = false;
         }
+
+      function removeSlash(path) {
+        var last = path.length - 1;
+        if(path[last] === '/') {
+          return path.slice(0, last);
+        }
+        return path;
+      }
     }
 })();
