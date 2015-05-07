@@ -1,7 +1,6 @@
 <?php namespace App\Services;
 
 use App\Cloud;
-use Illuminate\Support\Facades\Log;
 
 class ContentService {
 
@@ -25,7 +24,6 @@ class ContentService {
         }
         elseif($cloudType === Cloud::YandexDisk) {
             array_shift($contents);
-            Log::info($contents);
             foreach($contents as $content) {
                 //Create common interface
                 $temp = [

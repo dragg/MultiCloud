@@ -6,7 +6,6 @@ use App\Services\ContentService;
 use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
@@ -94,7 +93,6 @@ class ContentController extends Controller {
             $contents = $this->yandexDiskService->getContents($cloudId, $path);
         }
 
-        Log::info($contents);
         $contents = $this->contentService->getContents($contents, $cloud->type);
 
         return $contents;
@@ -142,12 +140,19 @@ class ContentController extends Controller {
 	public function destroy($cloudId, $path)
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
+        $path = $this->preparePath($path);
+
         if($cloud->type === Cloud::DropBox) {
-            $path = $this->preparePath($path);
             $response = $this->dropBoxService->removeContent($cloudId, $path);
-            return $response;
         }
-		return 'I don\'t can remove files from not dropbox';
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->removeContent($cloudId, $path);
+        }
+        else {
+            $response = 'I don\'t can remove files from not dropbox';
+        }
+
+        return $response;
 	}
 
 

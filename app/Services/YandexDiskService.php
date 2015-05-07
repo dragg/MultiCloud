@@ -44,7 +44,9 @@ class YandexDiskService extends CloudService {
 
     public function removeContent($cloudId, $path)
     {
-        // TODO: Implement removeContent() method.
+        $client = $this->getClient($cloudId);
+
+        return $client->delete($path) ? ['is_deleted' => true] : [];
     }
 
     public function moveContent($cloudId, $path, $newPath)
