@@ -125,7 +125,7 @@
         }
 
         function properties() {
-            console.log('properties');
+          console.log(vm.selectedContents[0]);
         }
 
         function move() {
