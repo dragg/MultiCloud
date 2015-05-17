@@ -24,7 +24,6 @@
     }
 
     function is(view) {
-      console.log(view);
       return $state.is(view);
     }
   }

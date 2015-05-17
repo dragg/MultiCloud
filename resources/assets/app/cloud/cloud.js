@@ -41,7 +41,6 @@
       CloudModel.get(cloudId).$promise
         .then(function (info) {
           vm.cloudInfo = info;
-          console.log(info);
           if(vm.cloudInfo.cloud.type === 1) {
             vm.info = {
               used: info.quota_info.normal,
