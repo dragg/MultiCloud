@@ -2,6 +2,7 @@
 
 use App\Cloud;
 use App\User;
+use Illuminate\Support\Facades\Log;
 use Yandex\Disk\DiskClient;
 
 class YandexDiskService extends CloudService {

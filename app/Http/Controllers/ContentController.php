@@ -5,7 +5,9 @@ use App\Http\Requests;
 use App\Services\ContentService;
 use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
+use App\Services\CloudActionService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
@@ -15,13 +17,16 @@ class ContentController extends Controller {
 
     protected $contentService;
 
+    protected $cloudService;
+
     public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService,
-                                ContentService $contentService)
+                                ContentService $contentService, CloudActionService $cloudService)
     {
         $this->dropBoxService = $dropBoxService;
         $this->yandexDiskService = $yandexDiskService;
 
         $this->contentService = $contentService;
+        $this->cloudService = $cloudService;
     }
 
 	/**
@@ -76,26 +81,19 @@ class ContentController extends Controller {
      *
      * @param  int  $cloudId
 	 * @param  int  $path
+     * @param  Request  $request
 	 * @return Response
 	 */
-	public function show($cloudId, $path)
+	public function show(Request $request, $cloudId, $path)
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
         $path = $this->preparePath($path);
-        $contents = [];
 
-        if($cloud->type === Cloud::DropBox) {
-            $contents = $this->dropBoxService->getContents($cloudId, $path);
-        }
-        elseif($cloud->type === Cloud::GoogleDrive) {
-        }
-        elseif($cloud->type === Cloud::YandexDisk) {
-            $contents = $this->yandexDiskService->getContents($cloudId, $path);
-        }
+        $contents = $this->cloudService->getContents($cloud, $path);
 
-        $contents = $this->contentService->getContents($contents, $cloud->type);
+        $response = $this->contentService->getContents($contents, $cloud->type);
 
-        return $contents;
+        return $response;
 	}
 
 	/**
