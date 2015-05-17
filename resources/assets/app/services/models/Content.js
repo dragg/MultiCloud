@@ -12,14 +12,12 @@
     var content = $resource('/clouds/:cloudId/contents/:contentPath',
         {id: '@cloudId', path: '@contentPath'},
         {
-          'update': {method: 'PUT'},
-          'properties' : {method: 'GET', params: {properties: true}}
+          'update': {method: 'PUT'}
         }),
       service = {
         fetch: fetch,
         remove: remove,
-        rename: rename,
-        properties: properties
+        rename: rename
       };
 
     return service;
@@ -36,10 +34,6 @@
 
     function rename(cloudId, path, newName) {
       return content.update({cloudId: cloudId, contentPath: path}, {newPath: newName}).$promise;
-    }
-
-    function properties(cloudId, path) {
-      return content.properties({cloudId: cloudId, contentPath: path}).$promise;
     }
   }
 })();
