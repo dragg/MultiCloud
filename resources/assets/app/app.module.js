@@ -11,6 +11,8 @@
             'app.clouds',
             'app.addCloud',
             'app.cloud',
-            'app.contents'
+            'app.contents',
+            'app.navigate',
+            'app.home'
         ]);
 })();
