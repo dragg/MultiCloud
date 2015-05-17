@@ -5,10 +5,10 @@
         .module('app.contents')
         .controller('Content', Content);
 
-    Content.$inject = ['Content', '$stateParams', '$state', '$location'];
+    Content.$inject = ['Content', '$stateParams', '$state', '$location', 'Spinner'];
 
     /* @ngInject */
-    function Content(Content, $stateParams, $state, $location) {
+    function Content(Content, $stateParams, $state, $location, Spinner) {
         /* jshint validthis: true */
         var vm = this,
             cloudId = $stateParams.cloudId;
@@ -103,9 +103,11 @@
         }
 
         function rename(newName) {
+          Spinner.startSpin();
             var path = convertPath(vm.selectedContents[0].path);
             return Content.rename(cloudId, path, getPath() + newName).then(function(data) {
                 init();
+              Spinner.stopSpin();
             });
         }
 

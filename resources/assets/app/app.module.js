@@ -13,6 +13,7 @@
             'app.cloud',
             'app.contents',
             'app.navigate',
-            'app.home'
+            'app.home',
+            'common'
         ]);
 })();
