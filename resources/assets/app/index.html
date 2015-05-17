@@ -10,33 +10,35 @@
     <meta name="generator" content="Bootply" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <link href="{{ asset('/css/styles.css') }}" rel="stylesheet">
-
     <!-- inject-vendor:css -->
     <link href="./components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="./components/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
     <link href="./components/toastr/toastr.css" rel="stylesheet" />
     <!-- endinject -->
 
+    <link href="{{ asset('/css/styles.css') }}" rel="stylesheet">
+
 </head>
 <body>
-    <div class="container page-container">
+    <div class="container main-container">
         <div class="row">
 
             <!-- top navbar -->
             <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="offcanvas" data-target=".sidebar-nav">
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand">Multi Cloud</a>
+                        <a class="navbar-brand" data-ui-sref="/">Multi Cloud</a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav">
                             <li><a data-ui-sref="/">Home</a></li>
+                            <li><a data-ui-sref="/">Clouds (in future)</a></li>
+                            <li><a data-ui-sref="/">Contents (in future)</a></li>
                             <li><a data-ui-sref="clouds">My clouds</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
@@ -54,7 +56,7 @@
 
     <footer class="footer">
         <div class="container">
-            <p class="text-muted">Some very good information.</p>
+            <p class="text-muted">Created in 2015 by <a href="https://vk.com/dragg">Zhidenko Nikolay</a></p>
         </div>
     </footer>
 
