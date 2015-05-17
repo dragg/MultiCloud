@@ -93,6 +93,7 @@ class ContentController extends Controller {
             $contents = $this->yandexDiskService->getContents($cloudId, $path);
         }
 
+        //need check is contents or others!
         $contents = $this->contentService->getContents($contents, $cloud->type);
 
         return $contents;

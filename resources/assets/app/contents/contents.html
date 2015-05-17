@@ -64,9 +64,7 @@
                         <td data-ng-if="!content.is_dir">
                             <i class="fa fa-file"></i>
                         </td>
-                        <td data-ng-click="vm.select(content)">{{content.display_name}}</td>
-                        <!--<td data-ng-if="content.is_dir" data-ng-click="vm.select(content)">{{content.path | contentName}}</td>-->
-                        <!--<td data-ng-if="!content.is_dir" data-ng-click="vm.select(content)">{{content.path | contentName}}</td>-->
+                        <td data-ng-click="vm.select(content)"><mc-content-name data-content-object="content"></mc-content-name></td>
                         <td>{{content.cloud_name}}</td>
 
                         <td data-ng-if="content.is_dir">-</td>
