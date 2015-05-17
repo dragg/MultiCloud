@@ -9,12 +9,14 @@
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
         <a data-ng-click="vm.properties()"><i class="fa fa-bars">Properties</i></a>
         <a data-ng-click="vm.move()"><i class="fa fa-scissors">Move</i></a>
+        <a data-ng-click="vm.share()"><i class="fa fa-share">Share</i></a>
     </div>
     <div data-ng-show="vm.isFolder">
         <a data-ng-click="vm.openFolder()"><i class="fa fa-folder-open">Open</i></a>
         <a data-ng-click="vm.renameForm()"><i class="fa fa-pencil-square-o">Rename</i></a>
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
         <a data-ng-click="vm.properties()"><i class="fa fa-bars">Properties</i></a>
+        <a data-ng-click="vm.share()"><i class="fa fa-share">Share</i></a>
     </div>
     <div data-ng-if="vm.isMulti">
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
@@ -48,7 +50,7 @@
     </tr>
     <tr>
         <td style="border: 0; padding: 0;">
-            <div class="scroll-container"  slimscroll="{height: '330px'}">
+            <div class="scroll-container"  data-slimscroll="{height: '330px'}">
                 <table class="table table-body" style="margin: 0;">
                     <tr>
                         <td>

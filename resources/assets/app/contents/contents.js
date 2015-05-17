@@ -5,10 +5,10 @@
         .module('app.contents')
         .controller('Content', Content);
 
-    Content.$inject = ['Content', '$stateParams', '$state', '$location', 'Spinner'];
+    Content.$inject = ['Content', '$stateParams', '$state', 'Spinner'];
 
     /* @ngInject */
-    function Content(Content, $stateParams, $state, $location, Spinner) {
+    function Content(Content, $stateParams, $state, Spinner) {
         /* jshint validthis: true */
         var vm = this,
             cloudId = $stateParams.cloudId;
@@ -34,6 +34,7 @@
         vm.remove = remove;
         vm.properties = properties;
         vm.move = move;
+      vm.share = share;
 
 
         init();
@@ -105,7 +106,7 @@
         function rename(newName) {
           Spinner.startSpin();
             var path = convertPath(vm.selectedContents[0].path);
-            return Content.rename(cloudId, path, getPath() + newName).then(function(data) {
+            return Content.rename(cloudId, path, getPath() + newName).then(function() {
                 init();
               Spinner.stopSpin();
             });
@@ -150,6 +151,10 @@
 
       function getPath() {
         return (vm.path !== '/') ? (vm.path + '/') : ('/');
+      }
+
+      function share() {
+        console.log('need share ' + vm.selectedContents[0]);
       }
     }
 })();
