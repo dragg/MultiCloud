@@ -2,7 +2,6 @@
 
 use App\Cloud;
 use App\User;
-use Illuminate\Support\Facades\Log;
 use Yandex\Disk\DiskClient;
 
 class YandexDiskService extends CloudService {
@@ -38,6 +37,12 @@ class YandexDiskService extends CloudService {
         $client = $this->getClient($cloudId);
 
         $contents = $client->directoryContents($path);
+
+        if($contents[0]['resourceType'] === 'file') {
+            $file = $client->downloadFile($path, app_path(), 'some.jpg');
+            /*$contents = $client->startPublishing($path);
+            $client->stopPublishing($path);*/
+        }
 
         return $contents;
     }

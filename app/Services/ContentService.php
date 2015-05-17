@@ -23,6 +23,11 @@ class ContentService {
             }
         }
         elseif($cloudType === Cloud::YandexDisk) {
+
+            if(!is_array($contents)) {
+                return [$contents];
+            }
+
             array_shift($contents);
             foreach($contents as $content) {
                 //Create common interface
