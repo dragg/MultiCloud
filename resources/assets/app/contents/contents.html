@@ -18,7 +18,7 @@
     <div data-ng-if="vm.isMulti">
         <a data-ng-click="vm.remove()"><i class="fa fa-trash">Remove</i></a>
     </div>
-    <form data-ng-if="vm.isFolder || vm.isFile" data-ng-show="vm.openRenameForm" data-ng-submit="vm.rename(newPath)" novalidate name="renameForm" data-ng-init="newPath = (vm.selectedContents[0].name | contentName)">
+    <form data-ng-if="vm.isFolder || vm.isFile" data-ng-show="vm.openRenameForm" data-ng-submit="vm.rename(newPath)" novalidate name="renameForm" data-ng-init="newPath = (vm.selectedContents[0].name)">
         <input type="text" data-ng-model="newPath">
         <button type="submit">Submit</button>
         <button type="button" data-ng-click="vm.renameForm()">Cancel</button>

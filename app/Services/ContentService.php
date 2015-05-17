@@ -1,12 +1,33 @@
 <?php namespace App\Services;
 
 use App\Cloud;
+use Illuminate\Support\Facades\Log;
 
 class ContentService {
+
+    private function isFile($content, $cloudType)
+    {
+        if($cloudType === Cloud::YandexDisk) {
+            if(count($content) === 1) {
+                return true;
+            }
+        }
+        elseif($cloudType === Cloud::DropBox) {
+            if(count($content) === 2) {
+                Log::info($content);
+                return true;
+            }
+        }
+    }
 
     public function getContents($contents, $cloudType)
     {
         $response = [];
+
+        //If it for download that no need handle data
+        if($this->isFile($contents, $cloudType)) {
+            return $contents;
+        }
 
         if($cloudType === Cloud::DropBox) {
             foreach($contents as $content) {
