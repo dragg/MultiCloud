@@ -15,26 +15,13 @@ Route::controllers([
 
 Route::group(['namespace' => 'Cloud'], function() {
     Route::get('/dropbox-auth-start', 'CloudAuthController@authDropbox');
-
     Route::get('/dropbox-auth-finish', 'CloudAuthController@callbackDropbox');
 
-    Route::get('/dropbox-profile/{id}', 'DropboxController@show');
-    Route::get('/dropbox-exit/{id}', 'DropboxController@destroy');
-
-
     Route::get('/yandex-auth-start', 'CloudAuthController@authYandex');
-
     Route::get('/yandex-auth-finish', 'CloudAuthController@callbackYandex');
 
-    Route::get('/yandex-profile/{id}', 'YandexController@show');
-    Route::get('/yandex-exit/{id}', 'YandexController@destroy');
-
     Route::get('/google-auth-start', 'CloudAuthController@authGoogle');
-
     Route::get('/google-auth-finish', 'CloudAuthController@callbackGoogle');
-
-    Route::get('/google-profile/{id}', 'GoogleController@show');
-    Route::get('/google-exit/{id}', 'GoogleController@destroy');
 });
 
 Route::resource('clouds', 'CloudController');
