@@ -3,7 +3,7 @@
 
   angular
     .module('app.contents')
-    .controller('ModalCtrl', Modal);
+    .controller('PropertyCtrl', Modal);
 
   Modal.$inject = ['$modalInstance', 'content'];
 

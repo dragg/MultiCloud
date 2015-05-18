@@ -150,7 +150,7 @@
           $modal.open({
             animation: true,
             templateUrl: 'properties.html',
-            controller: 'ModalCtrl',
+            controller: 'PropertyCtrl',
             controllerAs: 'vm',
             resolve: {
               content: function () {
