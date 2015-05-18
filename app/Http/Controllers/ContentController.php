@@ -7,7 +7,6 @@ use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
 use App\Services\CloudActionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
@@ -81,17 +80,16 @@ class ContentController extends Controller {
      *
      * @param  int  $cloudId
 	 * @param  int  $path
-     * @param  Request  $request
 	 * @return Response
 	 */
-	public function show(Request $request, $cloudId, $path)
+	public function show($cloudId, $path)
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
         $path = $this->preparePath($path);
 
         $contents = $this->cloudService->getContents($cloud, $path);
 
-        $response = $this->contentService->getContents($contents, $cloud->type);
+        $response = $this->contentService->getContents($contents, $cloud);
 
         return $response;
 	}

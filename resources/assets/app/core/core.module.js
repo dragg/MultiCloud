@@ -17,6 +17,6 @@
             /*
              * 3rd Party modules
              */
-            'ui.router', 'angularSpinner', 'ui.slimscroll'
+            'ui.router', 'angularSpinner', 'ui.slimscroll', 'ui.bootstrap'
         ]);
 })();

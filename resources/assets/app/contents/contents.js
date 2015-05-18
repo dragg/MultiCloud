@@ -5,10 +5,10 @@
         .module('app.contents')
         .controller('Content', Content);
 
-    Content.$inject = ['Content', '$stateParams', '$state', 'Spinner'];
+    Content.$inject = ['Content', '$stateParams', '$state', 'Spinner', '$modal'];
 
     /* @ngInject */
-    function Content(Content, $stateParams, $state, Spinner) {
+    function Content(Content, $stateParams, $state, Spinner, $modal) {
         /* jshint validthis: true */
         var vm = this,
             cloudId = $stateParams.cloudId;
@@ -126,7 +126,17 @@
         }
 
         function properties() {
-          console.log(vm.selectedContents[0]);
+          $modal.open({
+            animation: true,
+            templateUrl: 'properties.html',
+            controller: 'ModalCtrl',
+            controllerAs: 'vm',
+            resolve: {
+              content: function () {
+                return vm.selectedContents[0];
+              }
+            }
+          });
         }
 
         function move() {

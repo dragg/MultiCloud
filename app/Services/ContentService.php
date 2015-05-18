@@ -14,36 +14,38 @@ class ContentService {
         }
         elseif($cloudType === Cloud::DropBox) {
             if(count($content) === 2) {
-                Log::info($content);
                 return true;
             }
         }
     }
 
-    public function getContents($contents, $cloudType)
+    public function getContents($contents, $cloud)
     {
         $response = [];
 
         //If it for download that no need handle data
-        if($this->isFile($contents, $cloudType)) {
+        if($this->isFile($contents, $cloud->type)) {
             return $contents;
         }
 
-        if($cloudType === Cloud::DropBox) {
+        if($cloud->type === Cloud::DropBox) {
             foreach($contents as $content) {
                 //Create common interface
                 $temp = [
                     'is_dir' => $content['is_dir'],
                     'path' => $content['name'],
                     'size' => $content['size'],
-                    'updated_at' => $content['modified']
+                    'updated_at' => $content['modified'],
+
+                    'cloud_type' => $cloud->type,
+                    'cloud_name' => $cloud->name
                 ];
 
                 //Add to response
                 $response[] = $temp;
             }
         }
-        elseif($cloudType === Cloud::YandexDisk) {
+        elseif($cloud->type === Cloud::YandexDisk) {
 
             if(!is_array($contents)) {
                 return [$contents];
@@ -57,7 +59,10 @@ class ContentService {
                     'path' => $content['href'],
                     'size' => $content['contentLength'],
                     'updated_at' => $content['lastModified'],
-                    'display_name' => $content['displayName']
+                    'display_name' => $content['displayName'],
+
+                    'cloud_type' => $cloud->type,
+                    'cloud_name' => $cloud->name
                 ];
 
                 //Add to response
