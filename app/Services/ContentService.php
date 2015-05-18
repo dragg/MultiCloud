@@ -1,7 +1,6 @@
 <?php namespace App\Services;
 
 use App\Cloud;
-use Illuminate\Support\Facades\Log;
 
 class ContentService {
 
@@ -13,7 +12,7 @@ class ContentService {
             }
         }
         elseif($cloudType === Cloud::DropBox) {
-            if(count($content) === 2) {
+            if(count($content) === 2 && is_string($content[0])) {
                 return true;
             }
         }
