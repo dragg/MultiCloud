@@ -39,9 +39,7 @@ class YandexDiskService extends CloudService {
         $contents = $client->directoryContents($path);
 
         if($contents[0]['resourceType'] === 'file') {
-            $file = $client->downloadFile($path, app_path(), 'some.jpg');
-            /*$contents = $client->startPublishing($path);
-            $client->stopPublishing($path);*/
+            $contents = [$this->shareStart($cloudId, $path)];
         }
 
         return $contents;
