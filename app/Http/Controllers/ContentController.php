@@ -7,7 +7,6 @@ use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
 use App\Services\CloudActionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class ContentController extends Controller {
 
@@ -49,7 +48,7 @@ class ContentController extends Controller {
             $contents = $this->yandexDiskService->getContents($cloudId, '/');
         }
 
-        $contents = $this->contentService->getContents($contents, $cloud->type);
+        $contents = $this->contentService->getContents($contents, $cloud);
 
         return $contents;
 	}
@@ -93,8 +92,6 @@ class ContentController extends Controller {
             $response = [$this->cloudService->shareStart($cloud, $path)];
         } else {
             $contents = $this->cloudService->getContents($cloud, $path);
-
-            Log::info($contents);
 
             $response = $this->contentService->getContents($contents, $cloud);
         }

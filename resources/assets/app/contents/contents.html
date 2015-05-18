@@ -128,3 +128,17 @@
         <button class="btn btn-primary" data-ng-click="vm.ok()">OK</button>
     </div>
 </script>
+
+<script type="text/ng-template" id="submit-delete-modal.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Confirm deleting!</h3>
+    </div>
+    <div class="modal-body">
+        Are you sure that you want delete <span data-ng-repeat="content in vm.contents">{{content.path}} </span>?
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-ng-click="vm.ok()">OK</button>
+        <button class="btn btn-primary" data-ng-click="vm.cancel()">Cancel</button>
+    </div>
+</script>
+

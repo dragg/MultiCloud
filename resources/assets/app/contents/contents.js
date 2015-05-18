@@ -113,16 +113,37 @@
         }
 
         function remove() {
+          var modalInstance = $modal.open({
+            animation: true,
+            templateUrl: 'submit-delete-modal.html',
+            controller: 'SubmitDeleteCtrl',
+            controllerAs: 'vm',
+            resolve: {
+              contents: function () {
+                return vm.selectedContents;
+              }
+            }
+          });
+
+          modalInstance.result.then(function () {
+            Spinner.startSpin();
+            var count = 0;
             vm.selectedContents.forEach(function(content) {
-                var path = convertPath(content.path);
-                return Content.remove(cloudId, path).then(function(data) {
-                    if(data.is_deleted === true) {
-                        init();
-                    } else {
-                        console.log('Error by removing ' + path);
-                    }
-                });
+              count++;
+              var path = convertPath(content.path);
+              return Content.remove(cloudId, path).then(function(data) {
+                if(data.is_deleted === true) {
+                  count--;
+                  if(count === 0) {
+                    init();
+                    Spinner.stopSpin();
+                  }
+                } else {
+                  console.log('Error by removing ' + path);
+                }
+              });
             });
+          });
         }
 
         function properties() {
