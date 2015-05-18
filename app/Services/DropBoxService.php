@@ -4,7 +4,6 @@ use App\DropBox;
 use App\Cloud;
 use App\User;
 use Dropbox as dbx;
-use Illuminate\Support\Facades\Log;
 
 class DropBoxService extends CloudService {
 
@@ -106,4 +105,13 @@ class DropBoxService extends CloudService {
         return $client;
     }
 
+    public function shareStart($cloudId, $path)
+    {
+        // TODO: Implement shareStart() method.
+    }
+
+    public function shareStop($cloudId, $path)
+    {
+        // TODO: Implement shareStop() method.
+    }
 }

@@ -1,7 +1,6 @@
 <?php namespace App\Services;
 
 use App\Cloud;
-use Illuminate\Support\Facades\Log;
 
 class CloudActionService {
 
@@ -9,13 +8,16 @@ class CloudActionService {
 
     protected $yandexDiskService;
 
+    protected $googleDriveService;
+
     protected $contentService;
 
     public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService,
-                                ContentService $contentService)
+                                GoogleDriveService $googleDriveService, ContentService $contentService)
     {
         $this->dropBoxService = $dropBoxService;
         $this->yandexDiskService = $yandexDiskService;
+        $this->googleDriveService = $googleDriveService;
 
         $this->contentService = $contentService;
     }
@@ -34,6 +36,40 @@ class CloudActionService {
         }
 
         return $contents;
+    }
+
+    public function shareStart($cloud, $path)
+    {
+        $url = '';
+
+        if($cloud->type === Cloud::DropBox) {
+            $url = $this->dropBoxService->shareStart($cloud->id, $path);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $url = $this->googleDriveService->shareStart($cloud->id, $path);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $url = $this->yandexDiskService->shareStart($cloud->id, $path);
+        }
+
+        return $url;
+    }
+
+    public function shareStop($cloud, $path)
+    {
+        $response = false;
+
+        if($cloud->type === Cloud::DropBox) {
+            $response = $this->dropBoxService->shareStop($cloud->id, $path);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $response = $this->googleDriveService->shareStop($cloud->id, $path);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->shareStop($cloud->id, $path);
+        }
+
+        return $response;
     }
 
 }

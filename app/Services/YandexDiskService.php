@@ -2,7 +2,6 @@
 
 use App\Cloud;
 use App\User;
-use Illuminate\Support\Facades\Log;
 use Yandex\Disk\DiskClient;
 
 class YandexDiskService extends CloudService {
@@ -107,5 +106,30 @@ class YandexDiskService extends CloudService {
         }
 
         return $response;
+    }
+
+
+    /**
+     * @param int $cloudId
+     * @param string $path
+     * @return string Url
+     */
+    public function shareStart($cloudId, $path)
+    {
+        $client = $this->getClient($cloudId);
+
+        return $client->startPublishing($path);
+    }
+
+    /**
+     * @param int $cloudId
+     * @param string $path
+     * @return bool Success share stop
+     */
+    public function shareStop($cloudId, $path)
+    {
+        $client = $this->getClient($cloudId);
+
+        return $client->stopPublishing($path);
     }
 }

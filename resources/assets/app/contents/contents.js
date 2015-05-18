@@ -164,7 +164,10 @@
       }
 
       function share() {
-        console.log('need share ' + vm.selectedContents[0]);
+        var path = convertPath(vm.selectedContents[0].path);
+        Content.share(cloudId, path).then(function(data) {
+          //console.log(data);
+        })
       }
     }
 })();

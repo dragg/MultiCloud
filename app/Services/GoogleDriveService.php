@@ -5,7 +5,6 @@ use App\User;
 use Illuminate\Support\Facades\Config;
 use Google_Service_Oauth2;
 use Google_Client;
-use Illuminate\Support\Facades\Log;
 
 class GoogleDriveService extends CloudService {
 
@@ -89,5 +88,15 @@ class GoogleDriveService extends CloudService {
 
         //$client->revokeToken();
         $cloud->delete();
+    }
+
+    public function shareStart($cloudId, $path)
+    {
+        // TODO: Implement shareStart() method.
+    }
+
+    public function shareStop($cloudId, $path)
+    {
+        // TODO: Implement shareStop() method.
     }
 }
