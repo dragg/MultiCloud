@@ -55,21 +55,4 @@ class CloudActionService {
         return $url;
     }
 
-    public function shareStop($cloud, $path)
-    {
-        $response = false;
-
-        if($cloud->type === Cloud::DropBox) {
-            $response = $this->dropBoxService->shareStop($cloud->id, $path);
-        }
-        elseif($cloud->type === Cloud::GoogleDrive) {
-            $response = $this->googleDriveService->shareStop($cloud->id, $path);
-        }
-        elseif($cloud->type === Cloud::YandexDisk) {
-            $response = $this->yandexDiskService->shareStop($cloud->id, $path);
-        }
-
-        return $response;
-    }
-
 }

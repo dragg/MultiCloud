@@ -1,6 +1,5 @@
 <?php namespace App\Services;
 
-use App\DropBox;
 use App\Cloud;
 use App\User;
 use Dropbox as dbx;
@@ -107,11 +106,8 @@ class DropBoxService extends CloudService {
 
     public function shareStart($cloudId, $path)
     {
-        // TODO: Implement shareStart() method.
-    }
+        $client = $this->getClient($cloudId);
 
-    public function shareStop($cloudId, $path)
-    {
-        // TODO: Implement shareStop() method.
+        return $client->createShareableLink($path);
     }
 }

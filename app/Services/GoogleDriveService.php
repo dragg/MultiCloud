@@ -94,9 +94,4 @@ class GoogleDriveService extends CloudService {
     {
         // TODO: Implement shareStart() method.
     }
-
-    public function shareStop($cloudId, $path)
-    {
-        // TODO: Implement shareStop() method.
-    }
 }

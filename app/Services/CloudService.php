@@ -8,7 +8,6 @@ abstract class CloudService {
     abstract public function removeContent($cloudId, $path);
     abstract public function moveContent($cloudId, $path, $newPath);
     abstract public function shareStart($cloudId, $path);
-    abstract public function shareStop($cloudId, $path);
 
     abstract public function create($attributes);
     abstract public function infoCloud($cloudId);

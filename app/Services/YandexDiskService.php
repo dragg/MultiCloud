@@ -120,16 +120,4 @@ class YandexDiskService extends CloudService {
 
         return $client->startPublishing($path);
     }
-
-    /**
-     * @param int $cloudId
-     * @param string $path
-     * @return bool Success share stop
-     */
-    public function shareStop($cloudId, $path)
-    {
-        $client = $this->getClient($cloudId);
-
-        return $client->stopPublishing($path);
-    }
 }
