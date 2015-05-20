@@ -30,6 +30,7 @@ class CloudActionService {
             $contents = $this->dropBoxService->getContents($cloud->id, $path);
         }
         elseif($cloud->type === Cloud::GoogleDrive) {
+            $contents = $this->googleDriveService->getContents($cloud->id, $path);
         }
         elseif($cloud->type === Cloud::YandexDisk) {
             $contents = $this->yandexDiskService->getContents($cloud->id, $path);

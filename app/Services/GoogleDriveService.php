@@ -5,6 +5,7 @@ use App\User;
 use Illuminate\Support\Facades\Config;
 use Google_Service_Oauth2;
 use Google_Client;
+use Illuminate\Support\Facades\Log;
 
 class GoogleDriveService extends CloudService {
 
@@ -41,7 +42,7 @@ class GoogleDriveService extends CloudService {
         $client->setClientSecret(Config::get('clouds.google_drive.secret'));
         $client->setClientId(Config::get('clouds.google_drive.id'));
 
-        if($attributes instanceof GoogleDrive) {
+        if($attributes instanceof Cloud) {
             $client->setAccessToken(json_encode([
                 'access_token' => $attributes->access_token,
                 'token_type' => $attributes->token_type,
@@ -63,7 +64,20 @@ class GoogleDriveService extends CloudService {
 
     public function getContents($cloudId, $path)
     {
-        // TODO: Implement getContents() method.
+        $googleDrive = Cloud::findOrFail($cloudId);
+        $client = $this->getClient($googleDrive);
+        $service = new \Google_Service_Drive($client);
+
+        $response = [];
+
+        $files = $service->children->listChildren('root')->getItems();
+
+        foreach($files as $file) {
+            $_file = $service->files->get($file->getId());
+            array_push($response, $_file);
+        }
+        //$files = $service->files->get('15j2PVjMeezR3iHjhToyTQtjY0T38zaBjwURj2gyrwGQ')->getTitle();
+        return $response;
     }
 
     public function removeContent($cloudId, $path)

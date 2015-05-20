@@ -1,8 +1,11 @@
 <?php namespace App\Services;
 
 use App\Cloud;
+use Illuminate\Support\Facades\Log;
 
 class ContentService {
+
+    const GOOGLE_FOLDER = 'application/vnd.google-apps.folder';
 
     private function isFile($content, $cloudType)
     {
@@ -67,6 +70,25 @@ class ContentService {
                 //Add to response
                 $response[] = $temp;
             }
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            foreach ($contents as $content) {
+                Log::info($content->fileSize);
+                $temp = [
+                    'is_dir' => $content->mimeType === self::GOOGLE_FOLDER,
+                    'path' => '/',
+                    'size' => $content->fileSize,
+                    'updated_at' => $content->modifiedDate,
+                    'display_name' => $content->title,
+
+                    'cloud_type' => $cloud->type,
+                    'cloud_name' => $cloud->name
+                ];
+
+                //Add to response
+                $response[] = $temp;
+            }
+
         }
 
         return $response;
