@@ -1,7 +1,6 @@
 <?php namespace App\Services;
 
 use App\Cloud;
-use Illuminate\Support\Facades\Log;
 
 class ContentService {
 
@@ -19,6 +18,8 @@ class ContentService {
                 return true;
             }
         }
+
+        return false;
     }
 
     public function getContents($contents, $cloud)
@@ -73,10 +74,9 @@ class ContentService {
         }
         elseif($cloud->type === Cloud::GoogleDrive) {
             foreach ($contents as $content) {
-                Log::info($content->fileSize);
                 $temp = [
                     'is_dir' => $content->mimeType === self::GOOGLE_FOLDER,
-                    'path' => '/',
+                    'path' => $content->getId(),
                     'size' => $content->fileSize,
                     'updated_at' => $content->modifiedDate,
                     'display_name' => $content->title,

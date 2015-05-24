@@ -83,7 +83,11 @@
         }
 
         function changeDirectory() {
-            openFolder(vm.selectedContents[0].path);
+          var index,
+            path;
+          index = vm.selectedContents[0].path.slice();
+          path = vm.path + (index !== -1 ? '/' : '') + vm.selectedContents[0].path.slice(index !== -1 ? index : 0);
+          openFolder(path);
         }
 
         function back() {

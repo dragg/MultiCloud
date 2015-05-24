@@ -5,7 +5,6 @@ use App\User;
 use Illuminate\Support\Facades\Config;
 use Google_Service_Oauth2;
 use Google_Client;
-use Illuminate\Support\Facades\Log;
 
 class GoogleDriveService extends CloudService {
 
@@ -70,9 +69,10 @@ class GoogleDriveService extends CloudService {
 
         $response = [];
 
-        $files = $service->children->listChildren('root')->getItems();
+        $files = $service->children->listChildren($path)->getItems();
 
         foreach($files as $file) {
+
             $_file = $service->files->get($file->getId());
             array_push($response, $_file);
         }

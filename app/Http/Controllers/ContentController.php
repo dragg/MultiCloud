@@ -36,19 +36,9 @@ class ContentController extends Controller {
 	 */
 	public function index($cloudId)
 	{
-        $contents = [];
         $cloud = Cloud::findOrFail((int)$cloudId);
 
-        if($cloud->type === Cloud::DropBox) {
-            $contents =  $this->dropBoxService->getContents($cloudId, '/');
-        }
-        elseif($cloud->type === Cloud::GoogleDrive) {
-        }
-        elseif($cloud->type === Cloud::YandexDisk) {
-            $contents = $this->yandexDiskService->getContents($cloudId, '/');
-        }
-
-        $contents = $this->contentService->getContents($contents, $cloud);
+        $contents = $this->getContents($cloud, '/');
 
         return $contents;
 	}
@@ -90,9 +80,7 @@ class ContentController extends Controller {
         if($request->exists('share')) {
             $response = [$this->cloudService->shareStart($cloud, $path)];
         } else {
-            $contents = $this->cloudService->getContents($cloud, $path);
-
-            $response = $this->contentService->getContents($contents, $cloud);
+            $response = $this->getContents($cloud, $path);
         }
 
         return $response;
@@ -166,5 +154,19 @@ class ContentController extends Controller {
     private function preparePath($path)
     {
         return str_replace("\\", "/", $path);
+    }
+
+    /**
+     * @param $cloud
+     * @param $path
+     * @return array
+     */
+    private function getContents($cloud, $path)
+    {
+        $contents = $this->cloudService->getContents($cloud, $path);
+
+        $response = $this->contentService->getContents($contents, $cloud);
+
+        return $response;
     }
 }

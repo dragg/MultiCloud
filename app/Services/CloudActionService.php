@@ -30,6 +30,8 @@ class CloudActionService {
             $contents = $this->dropBoxService->getContents($cloud->id, $path);
         }
         elseif($cloud->type === Cloud::GoogleDrive) {
+            $path = ($path === '/') ? 'root' : $path;
+            $path = $this->getGooglePath($path);
             $contents = $this->googleDriveService->getContents($cloud->id, $path);
         }
         elseif($cloud->type === Cloud::YandexDisk) {
@@ -56,4 +58,9 @@ class CloudActionService {
         return $url;
     }
 
+    private function getGooglePath($path)
+    {
+        $pos = strrpos($path, '/');
+        return substr($path, ($pos !== FALSE ? $pos + 1 : 0));
+    }
 }
