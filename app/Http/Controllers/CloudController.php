@@ -2,15 +2,11 @@
 
 use App\Cloud;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-
 use App\Services\DropBoxService;
 use App\Services\GoogleDriveService;
 use App\Services\YandexDiskService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
 
 class CloudController extends Controller {
 

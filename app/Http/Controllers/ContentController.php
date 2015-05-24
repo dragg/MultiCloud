@@ -87,7 +87,6 @@ class ContentController extends Controller {
 	{
         $cloud = Cloud::findOrFail((int)$cloudId);
         $path = $this->preparePath($path);
-
         if($request->exists('share')) {
             $response = [$this->cloudService->shareStart($cloud, $path)];
         } else {

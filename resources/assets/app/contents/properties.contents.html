@@ -1,0 +1,44 @@
+<script type="text/ng-template" id="properties.html">
+    <div class="modal-header">
+        <h3 class="modal-title">Properties!</h3>
+    </div>
+    <div class="modal-body">
+        <table  class="table table-hover">
+            <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Name</td>
+                <td><mc-content-name data-content-object="vm.content"></mc-content-name></td>
+            </tr>
+            <tr>
+                <td>Full path</td>
+                <td>{{vm.content.path}}</td>
+            </tr>
+            <tr data-ng-if="!vm.content.is_dir">
+                <td>Size</td>
+                <td>{{vm.content.size}}</td>
+            </tr>
+            <tr>
+                <td>Updated at</td>
+                <td>{{vm.content.updated_at}}</td>
+            </tr>
+            <tr>
+                <td>Cloud type</td>
+                <td>{{vm.content.cloud_type | cloudType}}</td>
+            </tr>
+            <tr>
+                <td>Cloud name</td>
+                <td>{{vm.content.cloud_name}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-primary" data-ng-click="vm.ok()">OK</button>
+    </div>
+</script>
