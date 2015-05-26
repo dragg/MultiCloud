@@ -63,31 +63,30 @@ class GoogleDriveService extends CloudService {
 
     public function getContents($cloudId, $path)
     {
-        $googleDrive = Cloud::findOrFail($cloudId);
-        $client = $this->getClient($googleDrive);
-        $service = new \Google_Service_Drive($client);
+        $service = $this->getService($cloudId);
 
         $response = [];
 
         $files = $service->children->listChildren($path)->getItems();
 
         foreach($files as $file) {
-
             $_file = $service->files->get($file->getId());
             array_push($response, $_file);
         }
-        //$files = $service->files->get('15j2PVjMeezR3iHjhToyTQtjY0T38zaBjwURj2gyrwGQ')->getTitle();
         return $response;
     }
 
     public function removeContent($cloudId, $path)
     {
-        // TODO: Implement removeContent() method.
+        $service = $this->getService($cloudId);
+        $response = $service->files->delete($path);
+
+        return $response;
     }
 
     public function moveContent($cloudId, $path, $newPath)
     {
-        // TODO: Implement moveContent() method.
+
     }
 
     public function infoCloud($cloudId)
@@ -107,5 +106,29 @@ class GoogleDriveService extends CloudService {
     public function shareStart($cloudId, $path)
     {
         // TODO: Implement shareStart() method.
+    }
+
+    public function renameContent($cloudId, $fileId, $newTitle)
+    {
+        $service = $this->getService($cloudId);
+        $file = $service->files->get($fileId);
+
+        $file->setTitle($newTitle);
+
+        try {
+            $response = $service->files->update($fileId, $file) ? 'true' : 'false';
+        }
+        catch (\Google_Service_Exception $ex) {
+            $response = $ex->getMessage();
+        }
+
+        return $response;
+    }
+
+    public function getService($cloudId)
+    {
+        $googleDrive = $this->getCloud($cloudId);
+        $client = $this->getClient($googleDrive);
+        return new \Google_Service_Drive($client);
     }
 }

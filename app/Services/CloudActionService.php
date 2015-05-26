@@ -41,6 +41,45 @@ class CloudActionService {
         return $contents;
     }
 
+    public function moveContent($cloudId, $path, $moveCloudId, $newPath)
+    {
+        $response = [];
+
+        $cloud = Cloud::findOrFail((int)$cloudId);
+
+        if($cloud->type === Cloud::DropBox) {
+            $response = $this->dropBoxService->moveContent($cloudId, $path, $newPath);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->moveContent($cloudId, $path, $newPath);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $response = $this->googleDriveService->moveContent($cloudId, $path, $newPath);
+        }
+
+        return $response;
+    }
+
+    public function renameContent($cloudId, $path, $newPath)
+    {
+        $response = [];
+
+        $cloud = Cloud::findOrFail((int)$cloudId);
+
+        if($cloud->type === Cloud::DropBox) {
+            $response = $this->dropBoxService->renameContent($cloudId, $path, $newPath);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->renameContent($cloudId, $path, $newPath);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $response = $this->googleDriveService->renameContent($cloudId,
+                $this->getGooglePath($path), $this->getGooglePath($newPath));
+        }
+
+        return $response;
+    }
+
     public function shareStart($cloud, $path)
     {
         $url = '';

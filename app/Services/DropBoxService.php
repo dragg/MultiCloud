@@ -110,4 +110,13 @@ class DropBoxService extends CloudService {
 
         return $client->createShareableLink($path);
     }
+
+    public function renameContent($cloudId, $path, $newPath)
+    {
+        $client = $this->getClient($cloudId);
+
+        $response = $client->move($path, $newPath);
+
+        return $response;
+    }
 }

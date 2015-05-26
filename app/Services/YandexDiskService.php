@@ -55,7 +55,6 @@ class YandexDiskService extends CloudService {
     public function moveContent($cloudId, $path, $newPath)
     {
         $client = $this->getClient($cloudId);
-        //$client->uploadFile()
 
         return $client->move($path, $newPath) ? 'true' : 'false';
     }
@@ -117,5 +116,12 @@ class YandexDiskService extends CloudService {
         $client = $this->getClient($cloudId);
 
         return $client->startPublishing($path);
+    }
+
+    public function renameContent($cloudId, $path, $newPath)
+    {
+        $client = $this->getClient($cloudId);
+
+        return $client->move($path, $newPath) ? 'true' : 'false';
     }
 }
