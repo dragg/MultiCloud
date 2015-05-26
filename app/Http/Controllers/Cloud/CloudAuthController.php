@@ -123,9 +123,17 @@ class CloudAuthController extends Controller {
         //$client->setApplicationName(Config::get('clouds.google_drive.name'));
         $client->setClientSecret(Config::get('clouds.google_drive.secret'));
         $client->setClientId(Config::get('clouds.google_drive.id'));
-        $client->addScope([Google_Service_Drive::DRIVE_METADATA_READONLY,
+        $client->addScope([
             \Google_Service_Oauth2::USERINFO_PROFILE ,
-            \Google_Service_Oauth2::USERINFO_EMAIL]);
+            \Google_Service_Oauth2::USERINFO_EMAIL,
+            \Google_Service_Drive::DRIVE,
+            \Google_Service_Drive::DRIVE_FILE,
+            \Google_Service_Drive::DRIVE_APPDATA,
+            \Google_Service_Drive::DRIVE_SCRIPTS,
+            \Google_Service_Drive::DRIVE_APPS_READONLY,
+            "https://www.googleapis.com/auth/drive.metadata"
+
+        ]);
         $client->setRedirectUri(Config::get('app.url') . '/google-auth-finish');
         $url = $client->createAuthUrl();
 
