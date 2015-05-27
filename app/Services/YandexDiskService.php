@@ -77,7 +77,7 @@ class YandexDiskService extends CloudService {
         $cloud = $this->getCloud($cloudId);
 
         //We can't disable access token because we only delete from DB
-        $cloud->delete();
+        return $cloud->delete();
     }
 
     private function getClient($cloudId)

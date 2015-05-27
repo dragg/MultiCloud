@@ -97,6 +97,7 @@ class GoogleDriveService extends CloudService {
 
     public function infoCloud($cloudId)
     {
+        //ToDo: do it!
         //$client = $this->getClient($cloudId);
     }
 
@@ -106,7 +107,7 @@ class GoogleDriveService extends CloudService {
         //$client = $this->getClient($cloudId);
 
         //$client->revokeToken();
-        $cloud->delete();
+        return $cloud->delete();
     }
 
     public function shareStart($cloudId, $path)

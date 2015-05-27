@@ -1,28 +1,19 @@
 <?php namespace App\Http\Controllers;
 
+use \Response;
 use App\Cloud;
 use App\Http\Requests;
-use App\Services\DropBoxService;
-use App\Services\GoogleDriveService;
-use App\Services\YandexDiskService;
+use App\Services\CloudActionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CloudController extends Controller {
 
-    protected $dropBoxService;
+    protected $cloudActionService;
 
-    protected $googleDriveService;
-
-    protected $yandexDiskService;
-
-    public function __construct(DropBoxService $dropBoxServices,
-                                GoogleDriveService $googleDriveService,
-                                YandexDiskService $yandexDiskService)
+    public function __construct(CloudActionService $cloudActionService)
     {
-        $this->dropBoxService = $dropBoxServices;
-        $this->googleDriveService = $googleDriveService;
-        $this->yandexDiskService = $yandexDiskService;
+        $this->cloudActionService = $cloudActionService;
     }
 
 	/**
@@ -43,19 +34,7 @@ class CloudController extends Controller {
 	 */
 	public function show($id)
 	{
-        $response = [];
-        $cloud = $this->getCloud($id);
-        if($cloud->type === Cloud::DropBox) {
-            $response = $this->dropBoxService->infoCloud($id);
-        }
-        elseif ($cloud->type === Cloud::GoogleDrive) {
-            $response = $this->googleDriveService->infoCloud($id);
-        }
-        elseif ($cloud->type === Cloud::YandexDisk) {
-            $response = $this->yandexDiskService->infoCloud($id);
-        }
-        $response["cloud"] = $cloud;
-        return $response;
+        return $this->cloudActionService->getInfo($id);
 	}
 
 	/**
@@ -67,19 +46,7 @@ class CloudController extends Controller {
 	 */
 	public function update(Request $request, $id)
 	{
-        $response = [];
-        $cloud = $this->getCloud($id);
-        $name = $request->get('name');
-        if($cloud->type === Cloud::DropBox) {
-            $response = $this->dropBoxService->renameCloud($id, $name);
-        }
-        elseif ($cloud->type === Cloud::GoogleDrive) {
-            $response = $this->googleDriveService->renameCloud($id, $name);
-        }
-        elseif ($cloud->type === Cloud::YandexDisk) {
-            $response = $this->yandexDiskService->renameCloud($id, $name);
-        }
-        return $response;
+        return $this->cloudActionService->rename($id, $request->get('name'));
 	}
 
 	/**
@@ -91,29 +58,10 @@ class CloudController extends Controller {
 	public function destroy($id)
 	{
         $response = 'ok';
-		$cloud = $this->getCloud($id);
-        if($cloud->type === Cloud::DropBox) {
-            $this->dropBoxService->removeCloud($id);
-        }
-        elseif ($cloud->type === Cloud::GoogleDrive) {
-            $this->googleDriveService->removeCloud($id);
-        }
-        elseif ($cloud->type === Cloud::YandexDisk) {
-            $this->yandexDiskService->removeCloud($id);
-        }
+        $this->cloudActionService->remove($id);
         return $response;
 	}
 
-    private function getCloud($id)
-    {
-        //need catch exception
-        $cloud = Cloud::findOrFail((int)$id);
 
-        if(Auth::user()->id !== $cloud->user->id) {
-            //through exception
-        }
-
-        return $cloud;
-    }
 
 }

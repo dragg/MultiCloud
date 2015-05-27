@@ -92,7 +92,7 @@ class DropBoxService extends CloudService {
         $client = $this->getClient($cloudId);
 
         $client->disableAccessToken();
-        $cloud->delete();
+        return $cloud->delete();
     }
 
     private function getClient($cloudId)
