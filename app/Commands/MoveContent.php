@@ -35,15 +35,27 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
 	public function handle()
 	{
         $task = $this->task;
+
+        $task->toProgress();
+
         if($task->cloudIdFrom === $task->cloudIdTo) {
-            if($task->action === Task::COPY) {
-                Log::debug('copy');
-                $this->contentService
-                    ->copyContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
-            }
-            elseif($task->action === Task::MOVE) {
-                $this->contentService
-                    ->moveContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
+            try {
+                if($task->action === Task::COPY) {
+                    $this->contentService
+                        ->copyContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
+                }
+                elseif($task->action === Task::MOVE) {
+                    $this->contentService
+                        ->moveContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
+                } else {
+                    // todo: do something
+                }
+
+                $task->toSuccess();
+            } catch(\Exception $ex) {
+                Log::error($ex->getMessage());
+                $task->toFail();
+                return ;
             }
         }
         else {
