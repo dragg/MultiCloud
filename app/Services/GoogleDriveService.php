@@ -111,7 +111,17 @@ class GoogleDriveService extends CloudService {
 
     public function shareStart($cloudId, $path)
     {
-        // TODO: Implement shareStart() method.
+        $service = $this->getService($cloudId);
+
+        $permission = new \Google_Service_Drive_Permission();
+        $permission->setValue('');
+        $permission->setType('anyone');
+        $permission->setRole('reader');
+
+        $service->permissions->insert($path, $permission);
+
+        //return file
+        return $service->files->get($path);
     }
 
     public function renameContent($cloudId, $fileId, $newTitle)
