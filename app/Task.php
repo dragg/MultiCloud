@@ -36,7 +36,8 @@ class Task extends Model {
         QUEUE = 1,
         PROGRESS = 2,
         SUCCESS = 3,
-        FAIL = 4;
+        FAIL = 4,
+        ERROR_REQUEST = 5;
 
 
     public function toProgress()
@@ -55,9 +56,9 @@ class Task extends Model {
         return $this;
     }
 
-    public function toFail()
+    public function toFail($typeOfError)
     {
-        $this->status = Task::FAIL;
+        $this->status = $typeOfError;
         $this->end = Carbon::now();
         $this->save();
         return $this;

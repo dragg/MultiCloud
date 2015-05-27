@@ -40,6 +40,7 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
 
         if($task->cloudIdFrom === $task->cloudIdTo) {
             try {
+
                 if($task->action === Task::COPY) {
                     $this->contentService
                         ->copyContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
@@ -48,13 +49,17 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
                     $this->contentService
                         ->moveContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
                 } else {
-                    // todo: do something
+                    $task->toFail(Task::ERROR_REQUEST);
                 }
 
                 $task->toSuccess();
+
             } catch(\Exception $ex) {
+
                 Log::error($ex->getMessage());
-                $task->toFail();
+
+                $task->toFail(Task::FAIL);
+
                 return ;
             }
         }
