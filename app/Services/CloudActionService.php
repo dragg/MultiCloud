@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use App\Cloud;
+use App\Task;
 
 class CloudActionService {
 
@@ -43,11 +44,14 @@ class CloudActionService {
 
     public function moveContent($cloudId, $path, $moveCloudId, $newPath)
     {
-        $response = [];
+        $task = Task::create([
+            'cloudIdFrom' => $cloudId,
+            'pathFrom' => $path,
+            'cloudIdTo' => $moveCloudId,
+            'pathTo' => $newPath
+        ]);
 
-        $cloud = Cloud::findOrFail((int)$cloudId);
-
-        if($cloud->type === Cloud::DropBox) {
+        /*if($cloud->type === Cloud::DropBox) {
             $response = $this->dropBoxService->moveContent($cloudId, $path, $newPath);
         }
         elseif($cloud->type === Cloud::YandexDisk) {
@@ -55,9 +59,9 @@ class CloudActionService {
         }
         elseif($cloud->type === Cloud::GoogleDrive) {
             $response = $this->googleDriveService->moveContent($cloudId, $path, $newPath);
-        }
+        }*/
 
-        return $response;
+        return $task;
     }
 
     public function renameContent($cloudId, $path, $newPath)

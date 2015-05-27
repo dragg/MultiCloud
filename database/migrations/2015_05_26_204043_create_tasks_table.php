@@ -15,7 +15,12 @@ class CreateTasksTable extends Migration {
 		Schema::create('tasks', function(Blueprint $table)
 		{
 			$table->increments('id');
-            $table->integer('status');
+            $table->integer('status')->default(\App\Task::OPEN);
+            $table->integer('cloudIdFrom');
+            $table->string('pathFrom');
+            $table->integer('cloudIdTo');
+            $table->string('pathTo');
+            $table->integer('action')->default(\App\Task::COPY);// move or copy
             $table->dateTime('start');
             $table->dateTime('end');
 			$table->timestamps();

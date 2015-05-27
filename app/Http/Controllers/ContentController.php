@@ -111,7 +111,8 @@ class ContentController extends Controller {
         $path = $this->preparePath($path);
 
         if($request->exists('newCloudId') && $request->exists('newPath')) {
-            $response = $this->cloudService->moveContent($cloudId, $path, 0, $request->get('newPath'));
+            $response = $this->cloudService
+                ->moveContent($cloudId, $path, $request->get('newCloudId'), $request->get('newPath'));
         }
         elseif($request->exists('newPath')) {
             $response = $this->cloudService->renameContent($cloudId, $path, $request->get('newPath'));
