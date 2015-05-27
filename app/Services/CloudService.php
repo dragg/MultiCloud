@@ -6,6 +6,7 @@ abstract class CloudService {
 
     abstract public function getContents($cloudId, $path);
     abstract public function removeContent($cloudId, $path);
+    abstract public function copyContent($cloudId, $path, $newPath);
     abstract public function moveContent($cloudId, $path, $newPath);
     abstract public function renameContent($cloudId, $fileId, $newTitle);
     abstract public function shareStart($cloudId, $path);

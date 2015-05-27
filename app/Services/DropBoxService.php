@@ -119,4 +119,13 @@ class DropBoxService extends CloudService {
 
         return $response;
     }
+
+    public function copyContent($cloudId, $path, $newPath)
+    {
+        $client = $this->getClient($cloudId);
+
+        $response = $client->copy($path, $newPath);
+
+        return $response;
+    }
 }

@@ -164,8 +164,11 @@
           });
         }
 
-        function move() {
-            console.log('move');
+        function move(newName) {
+          var path = convertPath(vm.selectedContents[0].path);
+          Content.move(cloudId, path, cloudId, newName).then(function(data) {
+            console.log(data);
+          });
         }
 
         function convertPath(path) {

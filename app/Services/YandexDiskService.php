@@ -124,4 +124,11 @@ class YandexDiskService extends CloudService {
 
         return $client->move($path, $newPath) ? 'true' : 'false';
     }
+
+    public function copyContent($cloudId, $path, $newPath)
+    {
+        $client = $this->getClient($cloudId);
+
+        return $client->copy($path, $newPath) ? 'true' : 'false';
+    }
 }

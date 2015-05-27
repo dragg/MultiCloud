@@ -2,10 +2,10 @@
 
 use App\Cloud;
 use App\Http\Requests;
-use App\Services\ContentService;
+use App\Services\FormatContentService;
 use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
-use App\Services\CloudActionService;
+use App\Services\ContentService;
 use Illuminate\Http\Request;
 
 class ContentController extends Controller {
@@ -14,18 +14,18 @@ class ContentController extends Controller {
 
     protected $yandexDiskService;
 
+    protected $formatService;
+
     protected $contentService;
 
-    protected $cloudService;
-
     public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService,
-                                ContentService $contentService, CloudActionService $cloudService)
+                                FormatContentService $formatService, ContentService $contentService)
     {
         $this->dropBoxService = $dropBoxService;
         $this->yandexDiskService = $yandexDiskService;
 
+        $this->formatService = $formatService;
         $this->contentService = $contentService;
-        $this->cloudService = $cloudService;
     }
 
 	/**
@@ -78,7 +78,7 @@ class ContentController extends Controller {
         $cloud = Cloud::findOrFail((int)$cloudId);
         $path = $this->preparePath($path);
         if($request->exists('share')) {
-            $response = [$this->cloudService->shareStart($cloud, $path)];
+            $response = [$this->contentService->shareStart($cloud, $path)];
         } else {
             $response = $this->getContents($cloud, $path);
         }
@@ -111,11 +111,11 @@ class ContentController extends Controller {
         $path = $this->preparePath($path);
 
         if($request->exists('newCloudId') && $request->exists('newPath')) {
-            $response = $this->cloudService
-                ->moveContent($cloudId, $path, $request->get('newCloudId'), $request->get('newPath'));
+            $response = $this->contentService
+                ->taskToMove($cloudId, $path, $request->get('newCloudId'), $request->get('newPath'));
         }
         elseif($request->exists('newPath')) {
-            $response = $this->cloudService->renameContent($cloudId, $path, $request->get('newPath'));
+            $response = $this->contentService->renameContent($cloudId, $path, $request->get('newPath'));
         }
         else {
             //throw exception or smt
@@ -164,9 +164,9 @@ class ContentController extends Controller {
      */
     private function getContents($cloud, $path)
     {
-        $contents = $this->cloudService->getContents($cloud, $path);
+        $contents = $this->contentService->getContents($cloud, $path);
 
-        $response = $this->contentService->getContents($contents, $cloud);
+        $response = $this->formatService->getContents($contents, $cloud);
 
         return $response;
     }

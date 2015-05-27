@@ -19,7 +19,8 @@
         fetch: fetch,
         remove: remove,
         rename: rename,
-        share: share
+        share: share,
+        move: move
       };
 
     return service;
@@ -36,6 +37,10 @@
 
     function rename(cloudId, path, newName) {
       return content.update({cloudId: cloudId, contentPath: path}, {newPath: newName}).$promise;
+    }
+
+    function move(cloudId, path, newCloudId, pathTo) {
+      return content.update({cloudId: cloudId, contentPath: path}, {newCloudId: newCloudId,newPath: pathTo}).$promise;
     }
 
     function share(cloudId, path) {

@@ -2,7 +2,7 @@
 
 use App\Cloud;
 use App\User;
-use Illuminate\Support\Facades\Config;
+use \Config;
 use Google_Service_Oauth2;
 use Google_Client;
 
@@ -86,7 +86,13 @@ class GoogleDriveService extends CloudService {
 
     public function moveContent($cloudId, $path, $newPath)
     {
+        try {
+            $this->copyContent($cloudId, $path, $newPath);
 
+            return $this->removeContent($cloudId, $path);
+        } catch(\Exception $ex) {
+            return $ex->getMessage();
+        }
     }
 
     public function infoCloud($cloudId)
@@ -130,5 +136,17 @@ class GoogleDriveService extends CloudService {
         $googleDrive = $this->getCloud($cloudId);
         $client = $this->getClient($googleDrive);
         return new \Google_Service_Drive($client);
+    }
+
+    public function copyContent($cloudId, $path, $newPath)
+    {
+        $service = $this->getService($cloudId);
+
+        $copiedFile = new \Google_Service_Drive_DriveFile();
+        $copiedFile->setTitle($newPath);
+
+        $response = $service->files->copy($path, $copiedFile);
+
+        return $response;
     }
 }
