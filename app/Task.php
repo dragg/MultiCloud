@@ -2,6 +2,13 @@
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @property mixed pathTo
+ * @property mixed pathFrom
+ * @property mixed cloudIdFrom
+ * @property mixed action
+ * @property mixed cloudIdTo
+ */
 class Task extends Model {
 
     protected $table = 'tasks';
