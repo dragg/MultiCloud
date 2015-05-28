@@ -56,7 +56,7 @@ class CloudController extends Controller {
 	 */
 	public function destroy($id)
 	{
-        return $this->cloudActionService->remove($id);
+        return response()->json($this->cloudActionService->remove($id));
 	}
 
 
