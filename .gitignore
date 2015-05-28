@@ -1,10 +1,20 @@
+# Ignore all vendors
 /vendor
 /node_modules
-.env
-.idea
+/public/components/
+
+# Ignore compiled asserts from resources
+/public/build/
 /public/css/*.map
 /public/css/*.css
-/public/components/
-/public/build/
 /resources/views/layout.blade.php
+
+# Ignore IDE files
+.idea
+
+# Ignore Laravel helpers
 _ide_helper.php
+_ide_helper_models.php
+
+# Ignore enviroment file
+.env

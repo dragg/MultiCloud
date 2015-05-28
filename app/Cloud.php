@@ -3,12 +3,6 @@
 use App\Services\DropBoxService;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property mixed access_token
- * @property mixed token_type
- * @property mixed expires_in
- * @property mixed created
- */
 class Cloud extends Model {
 
     const

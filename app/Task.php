@@ -3,17 +3,6 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
-/**
- * @property mixed pathTo
- * @property mixed pathFrom
- * @property mixed cloudIdFrom
- * @property mixed action
- * @property mixed cloudIdTo
- * @property int status
- * @property string start
- * @property string end
- * @property mixed path
- */
 class Task extends Model {
 
     protected $table = 'tasks';
