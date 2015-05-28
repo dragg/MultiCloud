@@ -157,4 +157,14 @@ class GoogleDriveService extends CloudService {
 
         return $response;
     }
+
+    public function downloadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement downloadContents() method.
+    }
+
+    public function uploadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement uploadContents() method.
+    }
 }

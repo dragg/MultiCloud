@@ -131,4 +131,14 @@ class YandexDiskService extends CloudService {
 
         return $client->copy($path, $newPath) ? 'true' : 'false';
     }
+
+    public function downloadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement downloadContents() method.
+    }
+
+    public function uploadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement uploadContents() method.
+    }
 }

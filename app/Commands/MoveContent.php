@@ -48,7 +48,8 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
                 elseif($task->action === Task::MOVE) {
                     $this->contentService
                         ->moveContent($task->cloudIdFrom, $task->pathFrom, $task->pathTo);
-                } else {
+                }
+                else {
                     $task->toFail(Task::ERROR_REQUEST);
                 }
 
@@ -64,7 +65,32 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
             }
         }
         else {
-            //repeat download data and upload
+            try {
+                if($task->action === Task::COPY) {
+                    //It's copy
+                    $this->contentService
+                        ->copyToOtherCloud($task->cloudIdFrom, $task->cloudIdTo,
+                            $task->pathFrom, $task->pathTo, $task->path);
+                }
+                elseif($task->action === Task::MOVE) {
+                    $this->contentService
+                        ->moveToOtherCloud($task->cloudIdFrom, $task->cloudIdTo,
+                            $task->pathFrom, $task->pathTo, $task->path);
+                }
+                else {
+                    $task->toFail(Task::ERROR_REQUEST);
+                }
+
+                $task->toSuccess();
+
+            } catch(\Exception $ex) {
+
+                Log::error($ex->getMessage());
+
+                $task->toFail(Task::FAIL);
+
+                return ;
+            }
         }
 	}
 

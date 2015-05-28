@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int status
  * @property string start
  * @property string end
+ * @property mixed path
  */
 class Task extends Model {
 
@@ -25,7 +26,8 @@ class Task extends Model {
         'pathFrom',
         'cloudIdTo',
         'pathTo',
-        'action'
+        'action',
+        'path'
     ];
 
     const

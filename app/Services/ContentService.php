@@ -3,6 +3,7 @@
 use App\Cloud;
 use App\Commands\MoveContent;
 use App\Task;
+use Illuminate\Support\Facades\Storage;
 use \Queue;
 
 class ContentService {
@@ -68,7 +69,9 @@ class ContentService {
             'cloudIdFrom' => $cloudId,
             'pathFrom' => $path,
             'cloudIdTo' => $moveCloudId,
-            'pathTo' => $newPath
+            'pathTo' => $newPath,
+            //set random path
+            'path' => '/' . str_random(40)
         ]);
 
         Queue::push(
@@ -135,6 +138,70 @@ class ContentService {
         }
 
         return $response;
+    }
+
+    public function copyToOtherCloud($cloudIdFrom, $cloudIdTo, $pathFrom, $pathTo, $tempPath)
+    {
+        $cloudFrom = $this->getCloud($cloudIdFrom);
+        $cloudTo = $this->getCloud($cloudIdTo);
+        $justCopy = true;
+
+        if($cloudFrom->type === $cloudTo->type) {
+            if($cloudFrom->type === Cloud::DropBox) {
+                $justCopy = false;
+                $this->dropBoxService->copyToSameCloud($cloudIdFrom, $cloudIdTo, $pathFrom, $pathTo);
+            }
+        }
+
+        if($justCopy) {
+            //Download all files on my storage
+            $this->downloadContents($cloudIdFrom, $pathFrom, $tempPath);
+
+            //Upload all files on cloud
+            $this->uploadContents($cloudIdTo, $pathTo, $tempPath);
+
+            //Clear temp path
+            Storage::deleteDirectory($tempPath);
+        }
+    }
+
+    public function moveToOtherCloud($cloudIdFrom, $cloudIdTo, $pathFrom, $pathTo, $tempPath)
+    {
+        //It's copy
+        $this->copyToOtherCloud($cloudIdFrom, $cloudIdTo, $pathFrom, $pathTo, $tempPath);
+
+        //Then remove content
+        $this->removeContent($cloudIdFrom, $pathFrom);
+    }
+
+    private function downloadContents($cloudId, $cloudPath, $path)
+    {
+        $cloud = $this->getCloud($cloudId);
+
+        if($cloud->type === Cloud::DropBox) {
+            $this->dropBoxService->downloadContents($cloudId, $cloudPath, $path);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $this->yandexDiskService->downloadContents($cloudId, $cloudPath, $path);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $this->googleDriveService->downloadContents($cloudId, $cloudPath, $path);
+        }
+    }
+
+    private function uploadContents($cloudId, $cloudPath, $path)
+    {
+        $cloud = $this->getCloud($cloudId);
+
+        if($cloud->type === Cloud::DropBox) {
+            $this->dropBoxService->uploadContents($cloudId, $cloudPath, $path);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $this->yandexDiskService->uploadContents($cloudId, $cloudPath, $path);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $this->googleDriveService->uploadContents($cloudId, $cloudPath, $path);
+        }
     }
 
     public function removeContent($cloudId, $path)

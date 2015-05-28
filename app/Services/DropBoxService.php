@@ -129,4 +129,23 @@ class DropBoxService extends CloudService {
 
         return $response;
     }
+
+    public function copyToSameCloud($cloudIdFrom, $cloudIdTo, $pathFrom, $pathTo)
+    {
+        $cloudFrom = $this->getClient($cloudIdFrom);
+        $cloudTo = $this->getClient($cloudIdTo);
+
+        $copyRef = $cloudFrom->createCopyRef($pathFrom);
+        $cloudTo->copyFromCopyRef($copyRef, $pathTo);
+    }
+
+    public function downloadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement downloadContents() method.
+    }
+
+    public function uploadContents($cloudId, $cloudPath, $path)
+    {
+        // TODO: Implement uploadContents() method.
+    }
 }
