@@ -1,12 +1,12 @@
 <?php namespace App\Http\Controllers;
 
-use App\Cloud;
 use App\Http\Requests;
 use App\Services\FormatContentService;
 use App\Services\DropBoxService;
 use App\Services\YandexDiskService;
 use App\Services\ContentService;
 use Illuminate\Http\Request;
+use \Response;
 
 class ContentController extends Controller {
 
@@ -36,11 +36,7 @@ class ContentController extends Controller {
 	 */
 	public function index($cloudId)
 	{
-        $cloud = Cloud::findOrFail((int)$cloudId);
-
-        $contents = $this->getContents($cloud, '/');
-
-        return $contents;
+        return $this->getContents($cloudId, '/');
 	}
 
 	/**
@@ -75,12 +71,11 @@ class ContentController extends Controller {
 	 */
 	public function show(Request $request, $cloudId, $path)
 	{
-        $cloud = Cloud::findOrFail((int)$cloudId);
         $path = $this->preparePath($path);
         if($request->exists('share')) {
-            $response = [$this->contentService->shareStart($cloud, $path)];
+            $response = [$this->contentService->shareStart($cloudId, $path)];
         } else {
-            $response = $this->getContents($cloud, $path);
+            $response = $this->getContents($cloudId, $path);
         }
 
         return $response;
@@ -118,10 +113,8 @@ class ContentController extends Controller {
             $response = $this->contentService->renameContent($cloudId, $path, $request->get('newPath'));
         }
         else {
-            //throw exception or smt
+            $response = "newPath is necessary param. It's absent!";
         }
-
-
 
         return $response;
 	}
@@ -135,20 +128,7 @@ class ContentController extends Controller {
 	 */
 	public function destroy($cloudId, $path)
 	{
-        $cloud = Cloud::findOrFail((int)$cloudId);
-        $path = $this->preparePath($path);
-
-        if($cloud->type === Cloud::DropBox) {
-            $response = $this->dropBoxService->removeContent($cloudId, $path);
-        }
-        elseif($cloud->type === Cloud::YandexDisk) {
-            $response = $this->yandexDiskService->removeContent($cloudId, $path);
-        }
-        else {
-            $response = 'I don\'t can remove files from not dropbox';
-        }
-
-        return $response;
+        return $this->contentService->removeContent($cloudId, $path);
 	}
 
 
@@ -158,15 +138,15 @@ class ContentController extends Controller {
     }
 
     /**
-     * @param $cloud
+     * @param $cloudId
      * @param $path
      * @return array
      */
-    private function getContents($cloud, $path)
+    private function getContents($cloudId, $path)
     {
-        $contents = $this->contentService->getContents($cloud, $path);
+        $contents = $this->contentService->getContents($cloudId, $path);
 
-        $response = $this->formatService->getContents($contents, $cloud);
+        $response = $this->formatService->getContents($contents, $cloudId);
 
         return $response;
     }

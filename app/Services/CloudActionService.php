@@ -55,7 +55,7 @@ class CloudActionService {
             $response = $this->yandexDiskService->renameCloud($id, $name);
         }
         else {
-            $response = ["Error of type cloud"];
+            $response = "Error of type cloud";
         }
 
         return $response;
@@ -75,7 +75,7 @@ class CloudActionService {
             $response = $this->yandexDiskService->removeCloud($id);
         }
         else {
-            $response = ["Error of type cloud"];
+            $response = "Error of type cloud";
         }
 
         return $response;

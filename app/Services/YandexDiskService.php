@@ -2,7 +2,7 @@
 
 use App\Cloud;
 use App\User;
-use Yandex\Disk\DiskClient;
+use Yandex\Disk\DiskClient as YandexDiskClient;
 
 class YandexDiskService extends CloudService {
 
@@ -15,7 +15,7 @@ class YandexDiskService extends CloudService {
     {
         $access_token = $attributes['access_token'];
 
-        $diskClient = new DiskClient($access_token);
+        $diskClient = new YandexDiskClient($access_token);
         list($uid) = explode("\n", $diskClient->getLogin());
 
         $user = User::findOrFail($attributes['user_id']);
@@ -84,7 +84,7 @@ class YandexDiskService extends CloudService {
     {
         $cloud = $this->getCloud($cloudId);
 
-        $client = new \Yandex\Disk\DiskClient($cloud->access_token);
+        $client = new YandexDiskClient($cloud->access_token);
 
         return $client;
     }

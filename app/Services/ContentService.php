@@ -3,6 +3,7 @@
 use App\Cloud;
 use App\Commands\MoveContent;
 use App\Task;
+use \Queue;
 
 class ContentService {
 
@@ -20,10 +21,9 @@ class ContentService {
         $this->googleDriveService = $googleDriveService;
     }
 
-    public function getContents($cloud, $path)
+    public function getContents($cloudId, $path)
     {
-        $contents = [];
-
+        $cloud = $this->getCloud($cloudId);
         if($cloud->type === Cloud::DropBox) {
             $contents = $this->dropBoxService->getContents($cloud->id, $path);
         }
@@ -35,13 +35,16 @@ class ContentService {
         elseif($cloud->type === Cloud::YandexDisk) {
             $contents = $this->yandexDiskService->getContents($cloud->id, $path);
         }
+        else {
+            $contents = "Error of type cloud";
+        }
 
         return $contents;
     }
 
     public function moveContent($cloudId, $path, $newPath)
     {
-        $cloud = Cloud::findOrFail($cloudId);
+        $cloud = $this->getCloud($cloudId);
 
         if($cloud->type === Cloud::DropBox) {
             $response = $this->dropBoxService->moveContent($cloudId, $path, $newPath);
@@ -51,6 +54,9 @@ class ContentService {
         }
         elseif($cloud->type === Cloud::GoogleDrive) {
             $response = $this->googleDriveService->moveContent($cloudId, $path, $newPath);
+        }
+        else {
+            $response = "Error of type cloud";
         }
 
         return $response;
@@ -65,7 +71,7 @@ class ContentService {
             'pathTo' => $newPath
         ]);
 
-        \Queue::push(
+        Queue::push(
             new MoveContent($task, $this)
         );
 
@@ -74,9 +80,7 @@ class ContentService {
 
     public function renameContent($cloudId, $path, $newPath)
     {
-        $response = [];
-
-        $cloud = Cloud::findOrFail((int)$cloudId);
+        $cloud = $this->getCloud($cloudId);
 
         if($cloud->type === Cloud::DropBox) {
             $response = $this->dropBoxService->renameContent($cloudId, $path, $newPath);
@@ -88,12 +92,16 @@ class ContentService {
             $response = $this->googleDriveService->renameContent($cloudId,
                 $this->getGooglePath($path), $this->getGooglePath($newPath));
         }
+        else {
+            $response = "Error of type cloud";
+        }
 
         return $response;
     }
 
-    public function shareStart($cloud, $path)
+    public function shareStart($cloudId, $path)
     {
+        $cloud = $this->getCloud($cloudId);
         $url = '';
 
         if($cloud->type === Cloud::DropBox) {
@@ -109,15 +117,9 @@ class ContentService {
         return $url;
     }
 
-    private function getGooglePath($path)
-    {
-        $pos = strrpos($path, '/');
-        return substr($path, ($pos !== FALSE ? $pos + 1 : 0));
-    }
-
     public function copyContent($cloudId, $path, $newPath)
     {
-        $cloud = Cloud::findOrFail($cloudId);
+        $cloud = $this->getCloud($cloudId);
 
         if($cloud->type === Cloud::DropBox) {
             $response = $this->dropBoxService->copyContent($cloudId, $path, $newPath);
@@ -128,7 +130,47 @@ class ContentService {
         elseif($cloud->type === Cloud::GoogleDrive) {
             $response = $this->googleDriveService->copyContent($cloudId, $path, $newPath);
         }
+        else {
+            $response = "Error of type cloud";
+        }
 
         return $response;
+    }
+
+    public function removeContent($cloudId, $path)
+    {
+        $cloud = $this->getCloud($cloudId);
+        $path = $this->preparePath($path);
+
+        if($cloud->type === Cloud::DropBox) {
+            $response = $this->dropBoxService->removeContent($cloudId, $path);
+        }
+        elseif($cloud->type === Cloud::YandexDisk) {
+            $response = $this->yandexDiskService->removeContent($cloudId, $path);
+        }
+        elseif($cloud->type === Cloud::GoogleDrive) {
+            $response = $this->googleDriveService->removeContent($cloudId, $path);
+        }
+        else {
+            $response = "Error of type cloud";
+        }
+
+        return $response;
+    }
+
+    private function getGooglePath($path)
+    {
+        $pos = strrpos($path, '/');
+        return substr($path, ($pos !== FALSE ? $pos + 1 : 0));
+    }
+
+    private function preparePath($path)
+    {
+        return str_replace("\\", "/", $path);
+    }
+
+    public function getCloud($cloudId)
+    {
+        return Cloud::findOrFail((int)$cloudId);
     }
 }

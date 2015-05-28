@@ -104,9 +104,6 @@ class GoogleDriveService extends CloudService {
     public function removeCloud($cloudId)
     {
         $cloud = $this->getCloud($cloudId);
-        //$client = $this->getClient($cloudId);
-
-        //$client->revokeToken();
         return $cloud->delete();
     }
 

@@ -1,7 +1,6 @@
 <?php namespace App\Http\Controllers;
 
 use \Response;
-use App\Cloud;
 use App\Http\Requests;
 use App\Services\CloudActionService;
 use Illuminate\Http\Request;
@@ -57,9 +56,7 @@ class CloudController extends Controller {
 	 */
 	public function destroy($id)
 	{
-        $response = 'ok';
-        $this->cloudActionService->remove($id);
-        return $response;
+        return $this->cloudActionService->remove($id);
 	}
 
 

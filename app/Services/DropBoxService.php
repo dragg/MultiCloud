@@ -3,6 +3,7 @@
 use App\Cloud;
 use App\User;
 use Dropbox as dbx;
+use \Dropbox\Client as DropboxClient;
 
 class DropBoxService extends CloudService {
 
@@ -99,7 +100,7 @@ class DropBoxService extends CloudService {
     {
         $cloud = $this->getCloud($cloudId);
 
-        $client = new \Dropbox\Client($cloud->access_token, self::$clientIdentifier);
+        $client = new DropboxClient($cloud->access_token, self::$clientIdentifier);
 
         return $client;
     }

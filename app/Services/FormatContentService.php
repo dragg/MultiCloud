@@ -22,9 +22,11 @@ class FormatContentService {
         return false;
     }
 
-    public function getContents($contents, $cloud)
+    public function getContents($contents, $cloudId)
     {
         $response = [];
+
+        $cloud = Cloud::findOrFail($cloudId);
 
         //If it for download that no need handle data
         if($this->isFile($contents, $cloud->type)) {
