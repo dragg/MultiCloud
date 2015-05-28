@@ -141,7 +141,43 @@ class DropBoxService extends CloudService {
 
     public function downloadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement downloadContents() method.
+        $client = $this->getClient($cloudId);
+
+        //Create dir
+        $folder = storage_path() . '/app' . $path;
+        mkdir($folder);
+
+        $metadata = $client->getMetadataWithChildren($cloudPath);
+        $path = $folder . $metadata["path"];
+        if($metadata['is_dir']) {
+            $this->downloadDir($cloudPath, $folder, $client);
+        } else {
+            $this->downloadFile($cloudPath, $path, $client);
+        }
+    }
+
+    private function downloadFile($cloudPath, $localPath, $client)
+    {
+        $fd = fopen($localPath, "wb");
+        $client->getFile($cloudPath, $fd);
+        fclose($fd);
+    }
+
+    private function downloadDir($cloudPath, $localPath, $client)
+    {
+        //Create dir
+        mkdir($localPath . $cloudPath);
+
+        //Then download files
+        $metadata = $client->getMetadataWithChildren($cloudPath);
+        foreach($metadata["contents"] as $content) {
+            if($content["is_dir"]) {
+                $this->downloadDir($content["path"], $localPath, $client);
+            } else {
+                $path = $localPath . $content["path"];
+                $this->downloadFile($content["path"], $path, $client);
+            }
+        }
     }
 
     public function uploadContents($cloudId, $cloudPath, $path)
