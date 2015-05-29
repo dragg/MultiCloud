@@ -43,4 +43,9 @@ abstract class CloudService {
         return $contents;
     }
 
+    protected function getPathFromBase($path, $base)
+    {
+        return str_replace($base, "", $path);
+    }
+
 }

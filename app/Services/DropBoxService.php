@@ -145,37 +145,41 @@ class DropBoxService extends CloudService {
 
         //Create dir
         $folder = storage_path() . '/app' . $path;
+        mkdir($folder);
 
+        $basePath = substr($cloudPath, 0, strrpos($cloudPath, "/"));
 
         $metadata = $client->getMetadataWithChildren($cloudPath);
         $path = $folder . $metadata["path"];
         if($metadata['is_dir']) {
-            $this->downloadDir($cloudPath, $folder, $client);
+            $this->downloadDir($cloudPath, $folder, $client, $basePath);
         } else {
-            $this->downloadFile($cloudPath, $path, $client);
+            $this->downloadFile($cloudPath, $path, $client, $basePath);
         }
     }
 
-    private function downloadFile($cloudPath, $localPath, DropboxClient $client)
+    private function downloadFile($cloudPath, $localPath, DropboxClient $client, $baseCloudPath)
     {
-        $fd = fopen($localPath, "wb");
+
+        $fd = fopen($this->getPathFromBase($localPath, $baseCloudPath), "wb");
         $client->getFile($cloudPath, $fd);
         fclose($fd);
     }
 
-    private function downloadDir($cloudPath, $localPath, $client)
+    private function downloadDir($cloudPath, $localPath, $client, $baseCloudPath)
     {
         //Create dir
-        mkdir($localPath . $cloudPath);
+        $folder = $localPath . $this->getPathFromBase($cloudPath, $baseCloudPath);
+        mkdir($folder);
 
         //Then download files
         $metadata = $client->getMetadataWithChildren($cloudPath);
         foreach($metadata["contents"] as $content) {
             if($content["is_dir"]) {
-                $this->downloadDir($content["path"], $localPath, $client);
+                $this->downloadDir($content["path"], $localPath, $client, $baseCloudPath);
             } else {
                 $path = $localPath . $content["path"];
-                $this->downloadFile($content["path"], $path, $client);
+                $this->downloadFile($content["path"], $path, $client, $baseCloudPath);
             }
         }
     }
