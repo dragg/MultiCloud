@@ -184,9 +184,7 @@ class YandexDiskService extends CloudService {
     private function downloadFile($cloudPath, $localPath, YandexDiskClient $client, $baseCloudPath)
     {
         $path = $this->getPathFromBase($localPath, $baseCloudPath);
-        \Log::debug('file path: ' . $path);
-        \Log::debug($localPath);
-        \Log::debug($baseCloudPath);
+        $path = substr($path, 0, strrpos($path, "/") + 1);
         $client->downloadFile($cloudPath, $path);
     }
 
