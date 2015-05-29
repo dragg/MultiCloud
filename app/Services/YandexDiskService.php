@@ -178,6 +178,60 @@ class YandexDiskService extends CloudService {
 
     public function uploadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement uploadContents() method.
+        //Get full path
+        $path = $folder = storage_path() . '/app' . $path;
+
+        //Get contents
+        $contents = $this->getLocalContent($path);
+
+        $client = $this->getClient($cloudId);
+
+        foreach($contents as $content) {
+            $contentPath = $path . '/' . $content;
+            if(is_dir($contentPath)) {
+                $tempCloudPath = $cloudPath . $content . '/';
+                $client->createDirectory($tempCloudPath);
+                $this->uploadDir($tempCloudPath, $contentPath, $client);
+            }
+            else {
+                $this->uploadFile($cloudPath, $contentPath, $content, $client);
+            }
+        }
+    }
+
+    private function uploadDir($cloudPath, $localPath, YandexDiskClient $client)
+    {
+        //Get contents
+        $contents = $this->getLocalContent($localPath);
+
+        foreach($contents as $content) {
+            $contentPath = $localPath . '/' . $content;
+            if(is_dir($contentPath)) {
+                $tempCloudPath = $cloudPath . $content . '/';
+                $client->createDirectory($tempCloudPath);
+                $this->uploadDir($tempCloudPath, $contentPath, $client);
+            }
+            else {
+                $this->uploadFile($cloudPath, $contentPath, $content, $client);
+            }
+        }
+    }
+
+    private function uploadFile($cloudPath, $localPath, $newName, YandexDiskClient $client)
+    {
+        $client->uploadFile($cloudPath, [
+            'path' => $localPath,
+            'size' => filesize($localPath),
+            'name' => $newName
+        ]);
+    }
+
+    private function getLocalContent($path)
+    {
+        $contents = scandir($path);
+        array_shift($contents);
+        array_shift($contents);
+
+        return $contents;
     }
 }
