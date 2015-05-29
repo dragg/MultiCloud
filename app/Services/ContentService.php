@@ -3,7 +3,6 @@
 use App\Cloud;
 use App\Commands\MoveContent;
 use App\Task;
-use Illuminate\Support\Facades\Storage;
 use \Queue;
 
 class ContentService {
@@ -68,7 +67,7 @@ class ContentService {
         $task = Task::create([
             'cloudIdFrom' => $cloudId,
             'pathFrom' => $path,
-            'cloudIdTo' => 7,//$moveCloudId,
+            'cloudIdTo' => $moveCloudId,
             'pathTo' => $newPath,
             //set random path
             'path' => '/' . str_random(40)
