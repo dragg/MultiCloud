@@ -3,12 +3,11 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Dropbox as dbx;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
+use \Auth;
+use \Config;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Session;
+use \Log;
+use \Session;
 use Yandex\OAuth\OAuthClient;
 use Yandex\OAuth\Exception\AuthRequestException;
 use Google_Client;
@@ -143,7 +142,6 @@ class CloudAuthController extends Controller {
     public function callbackGoogle(Request $request)
     {
         if($request->exists('code')) {
-            Log::info($request->all());
             $client = new Google_Client();
             $client->setClientSecret(Config::get('clouds.google_drive.secret'));
             $client->setClientId(Config::get('clouds.google_drive.id'));
