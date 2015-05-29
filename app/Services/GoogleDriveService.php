@@ -8,7 +8,10 @@ use Google_Client;
 
 class GoogleDriveService extends CloudService {
 
-    const GOOGLE_FOLDER = 'application/vnd.google-apps.folder';
+    const
+        GOOGLE_FOLDER = 'application/vnd.google-apps.folder',
+        GOOGLE_FILE = 'application/vnd.google-apps.file',
+        GOOGLE_UPLOAD = 'application/octet-stream';
 
     public function create($attributes)
     {
@@ -62,6 +65,11 @@ class GoogleDriveService extends CloudService {
         return $client;
     }
 
+    /**
+     * @param $cloudId
+     * @param $path
+     * @return \Google_Service_Drive_DriveFile[]
+     */
     public function getContents($cloudId, $path)
     {
         $service = $this->getService($cloudId);
@@ -212,7 +220,7 @@ class GoogleDriveService extends CloudService {
         file_put_contents($pathFile, $fileContent);
     }
 
-    private function googleDownloadFile($service, $fileId)
+    private function googleDownloadFile(\Google_Service_Drive $service, $fileId)
     {
         $file = $service->files->get($fileId);
 
@@ -235,6 +243,70 @@ class GoogleDriveService extends CloudService {
 
     public function uploadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement uploadContents() method.
+        $service = $this->getService($cloudId);
+
+        //Get full path
+        $path = $folder = storage_path() . '/app' . $path;
+
+        //Get contents
+        $contents = $this->getLocalContent($path);
+
+        foreach($contents as $content) {
+            $contentPath = $path . '/' . $content;
+            if(is_dir($contentPath)) {
+                $newFolder = $this->insertFile($service, $content, $cloudPath, self::GOOGLE_FOLDER, $contentPath);
+                $this->uploadDir($newFolder->getId(), $contentPath, $service);
+            }
+            else {
+                $this->insertFile($service, $content, $cloudPath, self::GOOGLE_FILE, $contentPath);
+            }
+        }
     }
+
+    private function uploadDir($folderId, $filePath, $service)
+    {
+        //Get contents
+        $contents = $this->getLocalContent($filePath);
+
+        foreach($contents as $content) {
+            $contentPath = $filePath . '/' . $content;
+            if(is_dir($contentPath)) {
+                $newFolder = $this->insertFile($service, $content, $folderId, self::GOOGLE_FOLDER, $contentPath);
+                $this->uploadDir($newFolder->getId(), $contentPath, $service);
+            }
+            else {
+                $this->insertFile($service, $content, $folderId, self::GOOGLE_UPLOAD, $contentPath);
+            }
+        }
+    }
+
+    private function insertFile(\Google_Service_Drive $service, $title, $parentId, $mimeType, $filePath)
+    {
+        $file = new \Google_Service_Drive_DriveFile();
+        $file->setTitle($title);
+        $file->setMimeType($mimeType);
+
+        // Set the parent folder.
+        if ($parentId != null) {
+            $parent = new \Google_Service_Drive_ParentReference();
+            $parent->setId($parentId);
+            $file->setParents(array($parent));
+        }
+
+        try {
+            $data = file_get_contents($filePath);
+
+            $createdFile = $service->files->insert($file, array(
+                'data' => $data,
+                "uploadType" => $mimeType === self::GOOGLE_FOLDER ? "resumable" : "media",
+                'mimeType' => $mimeType,
+            ));
+
+            return $createdFile;
+        } catch (\Exception $e) {
+            \Log::debug("An error occurred: " . $e->getMessage());
+            return null;
+        }
+    }
+
 }
