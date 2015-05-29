@@ -16,7 +16,8 @@ class Task extends Model {
         'cloudIdTo',
         'pathTo',
         'action',
-        'path'
+        'path',
+        'user_id'
     ];
 
     const
@@ -53,5 +54,10 @@ class Task extends Model {
         $this->end = Carbon::now();
         $this->save();
         return $this;
+    }
+
+    public function user()
+    {
+        return $this->belongsTo('App\User');
     }
 }

@@ -3,6 +3,7 @@
 use App\Cloud;
 use App\Commands\MoveContent;
 use App\Task;
+use \Auth;
 use \Queue;
 
 class ContentService {
@@ -70,7 +71,8 @@ class ContentService {
             'cloudIdTo' => $moveCloudId,
             'pathTo' => $newPath,
             //set random path
-            'path' => '/' . str_random(40)
+            'path' => '/' . str_random(40),
+            'user_id' => Auth::user()->id
         ]);
 
         Queue::push(

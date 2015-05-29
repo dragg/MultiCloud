@@ -27,3 +27,5 @@ Route::group(['namespace' => 'Cloud'], function() {
 Route::resource('clouds', 'CloudController');
 
 Route::resource('clouds.contents', 'ContentController');
+
+Route::get('tasks', 'TaskController@index');
