@@ -161,10 +161,15 @@ class ContentService {
             $this->uploadContents($cloudIdTo, $pathTo, $tempPath);
 
             //Clear temp path
-            $folder = storage_path() . '/app' . $tempPath;
-            $this->rrmdir($folder);
-            //Storage::deleteDirectory($tempPath);
+            $this->removeLocalContent($tempPath);
         }
+    }
+
+    public function removeLocalContent($tempPath)
+    {
+        $folder = storage_path() . '/app' . $tempPath;
+        $this->rrmdir($folder);
+        //Storage::deleteDirectory($tempPath);
     }
 
     private function rrmdir($dir) {

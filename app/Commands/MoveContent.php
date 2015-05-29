@@ -89,6 +89,9 @@ class MoveContent extends Command implements SelfHandling, ShouldBeQueued {
 
                 $task->toFail(Task::FAIL);
 
+                //Clear local data
+                $this->contentService->removeLocalContent($task->path);
+
                 return ;
             }
         }
