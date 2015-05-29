@@ -6,6 +6,10 @@ use Yandex\Disk\DiskClient as YandexDiskClient;
 
 class YandexDiskService extends CloudService {
 
+    const
+        FILE = "file",
+        FOLDER = "dir";
+
     public function create($attributes)
     {
         return $this->refreshOrCreate($attributes);
@@ -38,9 +42,9 @@ class YandexDiskService extends CloudService {
 
         $contents = $client->directoryContents($path);
 
-        if($contents[0]['resourceType'] === 'file') {
+        /*if($contents[0]['resourceType'] === 'file') {
             $contents = [$this->shareStart($cloudId, $path)];
-        }
+        }*/
 
         return $contents;
     }
@@ -134,7 +138,42 @@ class YandexDiskService extends CloudService {
 
     public function downloadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement downloadContents() method.
+        $client = $this->getClient($cloudId);
+
+        //Create dir
+        $folder = storage_path() . '/app' . $path;
+        mkdir($folder);
+
+        $contents = $client->directoryContents($cloudPath);
+
+        if($contents[0]["resourceType"] === self::FILE) {
+            $this->downloadFile($contents[0]["href"], $folder, $client);
+        }
+        elseif($contents[0]["resourceType"] === self::FOLDER) {
+            $this->downloadDir($cloudPath, $folder, $client);
+        }
+    }
+
+    private function downloadDir($cloudPath, $localPath, YandexDiskClient $client)
+    {
+        $contents = $client->directoryContents($cloudPath);
+        $path = $localPath . $contents[0]["href"];
+        mkdir($path);
+        array_shift($contents);
+        foreach($contents as $content) {
+            if($content["resourceType"] === self::FILE) {
+                $this->downloadFile($content["href"], $path, $client);
+            }
+            elseif($content["resourceType"] === self::FOLDER) {
+                $this->downloadDir($content["href"], $localPath, $client);
+            }
+        }
+    }
+
+    private function downloadFile($cloudPath, $localPath, YandexDiskClient $client)
+    {
+        $path = $localPath . '/';
+        $client->downloadFile($cloudPath, $path);
     }
 
     public function uploadContents($cloudId, $cloudPath, $path)
