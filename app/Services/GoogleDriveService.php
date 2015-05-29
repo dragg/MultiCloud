@@ -8,6 +8,8 @@ use Google_Client;
 
 class GoogleDriveService extends CloudService {
 
+    const GOOGLE_FOLDER = 'application/vnd.google-apps.folder';
+
     public function create($attributes)
     {
         return $this->refreshOrCreate($attributes);
@@ -56,7 +58,6 @@ class GoogleDriveService extends CloudService {
                 'created' => $attributes['created']
             ]));
         }
-
 
         return $client;
     }
@@ -160,7 +161,76 @@ class GoogleDriveService extends CloudService {
 
     public function downloadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement downloadContents() method.
+        //Get file
+        $service = $this->getService($cloudId);
+        $file = $service->files->get($cloudPath);
+
+        //Create dir
+        $folderPath = storage_path() . '/app' . $path;
+        mkdir($folderPath);
+
+        //Download
+        if($file->getMimeType() === self::GOOGLE_FOLDER) {
+            $this->downloadDir($cloudId, $cloudPath, $file->getTitle(), $folderPath);
+        }
+        else {
+            $this->downloadFile($cloudId, $cloudPath, $folderPath);
+        }
+    }
+
+    private function downloadDir($cloudId, $cloudPath, $folderTitle, $folderPath)
+    {
+        //Create nest folder
+        $folderPath = $folderPath . '/' . $folderTitle;
+        mkdir($folderPath);
+
+        $contents = $this->getContents($cloudId, $cloudPath);
+        foreach($contents as $content) {
+            if($content->getMimeType()  === self::GOOGLE_FOLDER) {
+                $this->downloadDir($cloudId, $content->getId(), $content->getTitle(), $folderPath);
+            }
+            else {
+                $this->downloadFile($cloudId, $content->getId(), $folderPath);
+            }
+        }
+    }
+
+    private function downloadFile($cloudId, $fileId, $path)
+    {
+        //Get file
+        $service = $this->getService($cloudId);
+        $file = $service->files->get($fileId);
+
+        //Get info about file
+        $fileName = $file->getTitle();
+        $pathFile = $path . '/' . $fileName;
+
+        //Get link to file
+        $fileContent = $this->googleDownloadFile($service, $fileId);
+
+        //Download File
+        file_put_contents($pathFile, $fileContent);
+    }
+
+    private function googleDownloadFile($service, $fileId)
+    {
+        $file = $service->files->get($fileId);
+
+        $downloadUrl = $file->getDownloadUrl();
+
+        if ($downloadUrl) {
+            $request = new \Google_Http_Request($downloadUrl, 'GET', null, null);
+            $httpRequest = $service->getClient()->getAuth()->authenticatedRequest($request);
+            if ($httpRequest->getResponseHttpCode() == 200) {
+                return $httpRequest->getResponseBody();
+            } else {
+                // An error occurred.
+                return null;
+            }
+        } else {
+            // The file doesn't have any content stored on Drive.
+            return null;
+        }
     }
 
     public function uploadContents($cloudId, $cloudPath, $path)
