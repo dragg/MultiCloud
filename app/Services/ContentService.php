@@ -68,7 +68,7 @@ class ContentService {
         $task = Task::create([
             'cloudIdFrom' => $cloudId,
             'pathFrom' => $path,
-            'cloudIdTo' => $moveCloudId,
+            'cloudIdTo' => 7,//$moveCloudId,
             'pathTo' => $newPath,
             //set random path
             'path' => '/' . str_random(40)
@@ -161,7 +161,22 @@ class ContentService {
             $this->uploadContents($cloudIdTo, $pathTo, $tempPath);
 
             //Clear temp path
-            Storage::deleteDirectory($tempPath);
+            $folder = storage_path() . '/app' . $tempPath;
+            $this->rrmdir($folder);
+            //Storage::deleteDirectory($tempPath);
+        }
+    }
+
+    private function rrmdir($dir) {
+        if (is_dir($dir)) {
+            $objects = scandir($dir);
+            foreach ($objects as $object) {
+                if ($object != "." && $object != "..") {
+                    if (filetype($dir."/".$object) == "dir") $this->rrmdir($dir."/".$object); else unlink($dir."/".$object);
+                }
+            }
+            reset($objects);
+            rmdir($dir);
         }
     }
 
