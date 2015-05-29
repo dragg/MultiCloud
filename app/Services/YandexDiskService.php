@@ -144,35 +144,49 @@ class YandexDiskService extends CloudService {
         $folder = storage_path() . '/app' . $path;
         mkdir($folder);
 
+        \Log::debug('cloud path:');
+        \Log::debug($cloudPath);
+        $basePath = substr($cloudPath, 0, strrpos($cloudPath, "/"));
+        $basePath = substr($basePath, 0, strrpos($basePath, "/"));
+        \Log::debug('base cloud path:');
+        \Log::debug($basePath);
+
         $contents = $client->directoryContents($cloudPath);
 
         if($contents[0]["resourceType"] === self::FILE) {
-            $this->downloadFile($contents[0]["href"], $folder, $client);
+            $this->downloadFile($contents[0]["href"], $folder, $client, $basePath);
         }
         elseif($contents[0]["resourceType"] === self::FOLDER) {
-            $this->downloadDir($cloudPath, $folder, $client);
+            $this->downloadDir($cloudPath, $folder, $client, $basePath);
         }
     }
 
-    private function downloadDir($cloudPath, $localPath, YandexDiskClient $client)
+    private function downloadDir($cloudPath, $localPath, YandexDiskClient $client, $baseCloudPath)
     {
         $contents = $client->directoryContents($cloudPath);
-        $path = $localPath . $contents[0]["href"];
+        \Log::debug('subpath: ' . $this->getPathFromBase($contents[0]["href"], $baseCloudPath));
+        $path = $localPath . $this->getPathFromBase($contents[0]["href"], $baseCloudPath);
+        \Log::debug('next folder');
+        \Log::debug($path);
         mkdir($path);
         array_shift($contents);
         foreach($contents as $content) {
             if($content["resourceType"] === self::FILE) {
-                $this->downloadFile($content["href"], $path, $client);
+                $path = $localPath . $content["href"];
+                $this->downloadFile($content["href"], $path, $client, $baseCloudPath);
             }
             elseif($content["resourceType"] === self::FOLDER) {
-                $this->downloadDir($content["href"], $localPath, $client);
+                $this->downloadDir($content["href"], $localPath, $client, $baseCloudPath);
             }
         }
     }
 
-    private function downloadFile($cloudPath, $localPath, YandexDiskClient $client)
+    private function downloadFile($cloudPath, $localPath, YandexDiskClient $client, $baseCloudPath)
     {
-        $path = $localPath . '/';
+        $path = $this->getPathFromBase($localPath, $baseCloudPath);
+        \Log::debug('file path: ' . $path);
+        \Log::debug($localPath);
+        \Log::debug($baseCloudPath);
         $client->downloadFile($cloudPath, $path);
     }
 

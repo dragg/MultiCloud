@@ -45,7 +45,13 @@ abstract class CloudService {
 
     protected function getPathFromBase($path, $base)
     {
-        return str_replace($base, "", $path);
+        if($base) {
+            $start = strpos($path, $base);
+            return substr($path, 0, $start) . substr($path, $start + strlen($base));
+        }
+        else {
+            return $path;
+        }
     }
 
 }
