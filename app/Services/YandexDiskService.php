@@ -225,13 +225,4 @@ class YandexDiskService extends CloudService {
             'name' => $newName
         ]);
     }
-
-    private function getLocalContent($path)
-    {
-        $contents = scandir($path);
-        array_shift($contents);
-        array_shift($contents);
-
-        return $contents;
-    }
 }

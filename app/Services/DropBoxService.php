@@ -145,7 +145,7 @@ class DropBoxService extends CloudService {
 
         //Create dir
         $folder = storage_path() . '/app' . $path;
-        mkdir($folder);
+
 
         $metadata = $client->getMetadataWithChildren($cloudPath);
         $path = $folder . $metadata["path"];
@@ -156,7 +156,7 @@ class DropBoxService extends CloudService {
         }
     }
 
-    private function downloadFile($cloudPath, $localPath, $client)
+    private function downloadFile($cloudPath, $localPath, DropboxClient $client)
     {
         $fd = fopen($localPath, "wb");
         $client->getFile($cloudPath, $fd);
@@ -182,6 +182,49 @@ class DropBoxService extends CloudService {
 
     public function uploadContents($cloudId, $cloudPath, $path)
     {
-        // TODO: Implement uploadContents() method.
+        $client = $this->getClient($cloudId);
+
+        //Get full path
+        $path = $folder = storage_path() . '/app' . $path;
+
+        //Get contents
+        $contents = $this->getLocalContent($path);
+
+        foreach($contents as $content) {
+            $contentPath = $path . '/' . $content;
+            if(is_dir($contentPath)) {
+                $folderCloudPath = $cloudPath . '/' . $content;
+                $client->createFolder($folderCloudPath);
+                $this->uploadDir($folderCloudPath, $contentPath, $client);
+            }
+            else {
+                $this->uploadFile($cloudPath . '/' . $content, $contentPath, $client);
+            }
+        }
+    }
+
+    private function uploadDir($cloudPath, $localPath, DropboxClient $client)
+    {
+        //Get contents
+        $contents = $this->getLocalContent($localPath);
+
+        foreach($contents as $content) {
+            $contentPath = $localPath . '/' . $content;
+            if(is_dir($contentPath)) {
+                $folderCloudPath = $cloudPath . '/' . $content;
+                $client->createFolder($folderCloudPath);
+                $this->uploadDir($folderCloudPath, $contentPath, $client);
+            }
+            else {
+                $this->uploadFile($cloudPath . '/' . $content, $contentPath, $client);
+            }
+        }
+    }
+
+    private function uploadFile($cloudPath, $localPath, DropboxClient $client)
+    {
+        $fd = fopen($localPath, "rb");
+        $client->uploadFile($cloudPath, dbx\WriteMode::add(), $fd, filesize($localPath));
+        fclose($fd);
     }
 }

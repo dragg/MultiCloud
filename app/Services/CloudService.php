@@ -34,4 +34,13 @@ abstract class CloudService {
         return $cloud;
     }
 
+    protected function getLocalContent($path)
+    {
+        $contents = scandir($path);
+        array_shift($contents);
+        array_shift($contents);
+
+        return $contents;
+    }
+
 }
