@@ -1,13 +1,13 @@
 <?php
 
-Route::get('/', 'HomeController@index');
-
 Route::controllers([
 	'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
 ]);
 
 Route::group(['middleware' => ['auth']], function() {
+
+    Route::get('/', 'HomeController@index');
 
     Route::resource('clouds', 'CloudController');
 
