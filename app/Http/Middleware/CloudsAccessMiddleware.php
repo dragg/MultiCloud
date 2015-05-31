@@ -4,7 +4,7 @@ use App\Cloud;
 use Closure;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
-class CloudAccessMiddleware {
+class CloudsAccessMiddleware {
 
 	/**
 	 * Handle an incoming request.
