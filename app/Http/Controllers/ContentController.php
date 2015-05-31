@@ -2,30 +2,22 @@
 
 use App\Http\Requests;
 use App\Services\FormatContentService;
-use App\Services\DropBoxService;
-use App\Services\YandexDiskService;
 use App\Services\ContentService;
 use Illuminate\Http\Request;
 use \Response;
 
 class ContentController extends Controller {
 
-    protected $dropBoxService;
-
-    protected $yandexDiskService;
-
     protected $formatService;
 
     protected $contentService;
 
-    public function __construct(DropBoxService $dropBoxService, YandexDiskService $yandexDiskService,
-                                FormatContentService $formatService, ContentService $contentService)
+    public function __construct(FormatContentService $formatService, ContentService $contentService)
     {
-        $this->dropBoxService = $dropBoxService;
-        $this->yandexDiskService = $yandexDiskService;
-
         $this->formatService = $formatService;
         $this->contentService = $contentService;
+
+        $this->middleware('clouds.access');
     }
 
 	/**
