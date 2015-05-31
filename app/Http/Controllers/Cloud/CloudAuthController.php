@@ -20,7 +20,7 @@ class CloudAuthController extends Controller {
 
     private static $clientIdentifier = "MultiCloudThesis alpha";
 
-	public function authDropbox(Request $request)
+	public function getDropboxAuthStart(Request $request)
 	{
         Session::put('name', $request->get('name'));
 
@@ -33,7 +33,7 @@ class CloudAuthController extends Controller {
         return redirect($authorizeUrl);
 	}
 
-	public function callbackDropbox(Request $request)
+	public function getDropboxAuthFinish(Request $request)
 	{
         try {
             list($accessToken, $userId, $urlState) = $this->getWebAuth()->finish($request->all());
@@ -83,7 +83,7 @@ class CloudAuthController extends Controller {
         return new dbx\WebAuth($appInfo, $clientIdentifier, $redirectUri, $csrfTokenStore);
     }
 
-    public function authYandex(Request $request)
+    public function getYandexAuthStart(Request $request)
     {
         $client = new OAuthClient(Config::get('clouds.yandex_disk.id'));
         //Передать в запросе какое-то значение в параметре state, чтобы Yandex в ответе его вернул
@@ -92,7 +92,7 @@ class CloudAuthController extends Controller {
         $client->authRedirect(true, OAuthClient::CODE_AUTH_TYPE, $state);
     }
 
-    public function callbackYandex(Request $request)
+    public function getYandexAuthFinish(Request $request)
     {
         $client = new OAuthClient(Config::get('clouds.yandex_disk.id'), Config::get('clouds.yandex_disk.password'));
 
@@ -113,7 +113,7 @@ class CloudAuthController extends Controller {
         return redirect('/home');
     }
 
-    public function authGoogle(Request $request)
+    public function getGoogleAuthStart(Request $request)
     {
         Session::put('name', $request->get('name'));
 
@@ -139,7 +139,7 @@ class CloudAuthController extends Controller {
         return redirect($url);
     }
 
-    public function callbackGoogle(Request $request)
+    public function getGoogleAuthFinish(Request $request)
     {
         if($request->exists('code')) {
             $client = new Google_Client();
