@@ -13,6 +13,7 @@ class CloudController extends Controller {
     public function __construct(CloudActionService $cloudActionService)
     {
         $this->cloudActionService = $cloudActionService;
+        $this->middleware('clouds.access', ['except' => 'index']);
     }
 
 	/**
@@ -58,7 +59,4 @@ class CloudController extends Controller {
 	{
         return response()->json($this->cloudActionService->remove($id));
 	}
-
-
-
 }
