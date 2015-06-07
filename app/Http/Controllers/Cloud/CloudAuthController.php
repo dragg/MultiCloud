@@ -67,7 +67,7 @@ class CloudAuthController extends Controller {
             Log::error("/dropbox-auth-finish: error communicating with DropBox API: " . $ex->getMessage());
         }
 
-        return redirect('/home');
+        return redirect('/');
 	}
 
     private function getWebAuth()
@@ -110,7 +110,7 @@ class CloudAuthController extends Controller {
         $name = $request->get('state');
         $yandex->create(['access_token' => $token, 'user_id' => Auth::user()->id, 'name' => $name]);
 
-        return redirect('/home');
+        return redirect('/');
     }
 
     public function getGoogleAuthStart(Request $request)
@@ -154,6 +154,6 @@ class CloudAuthController extends Controller {
             $googleService->create(array_merge((array)$token, ['user_id' => Auth::user()->id, 'name' => $name]));
         }
 
-        return redirect('/home');
+        return redirect('/');
     }
 }

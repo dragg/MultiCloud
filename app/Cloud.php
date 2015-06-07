@@ -30,21 +30,4 @@ class Cloud extends Model {
         return $this->belongsTo('App\User');
     }
 
-    protected static $dropBoxServices;
-
-    public function __construct(array $attributes = array(), DropBoxService $dropBoxServices = null)
-    {
-        parent::__construct($attributes);
-        self::$dropBoxServices = $dropBoxServices;
-    }
-
-    public function getContents($path)
-    {
-        $contents = [];
-        if($this->type === Cloud::DropBox && self::$dropBoxServices != null) {
-            $contents = self::$dropBoxServices->getContents($path, $this->access_token);
-
-        }
-        return $contents;
-    }
 }
