@@ -17,9 +17,9 @@ abstract class CloudService {
     abstract public function infoCloud($cloudId);
     abstract public function removeCloud($cloudId);
 
-    public function renameCloud($cloudId, $name)
+    public static function renameCloud($cloudId, $name)
     {
-        $cloud = $this->getCloud($cloudId);
+        $cloud = self::getCloud($cloudId);
 
         $cloud->name = $name;
         $cloud->save();
@@ -27,7 +27,7 @@ abstract class CloudService {
         return $cloud;
     }
 
-    protected function getCloud($cloudId)
+    protected  static function getCloud($cloudId)
     {
         //need catch exception
         $cloud = Cloud::findOrFail((int)$cloudId);

@@ -2,6 +2,7 @@
 
 use App\Cloud;
 use \Auth;
+use \App\Services\CloudService;
 
 class CloudActionService {
 
@@ -49,22 +50,7 @@ class CloudActionService {
 
     public function rename($id, $name)
     {
-        $cloud = $this->getCloud($id);
-
-        if($cloud->type === Cloud::DropBox) {
-            $response = $this->dropBoxService->renameCloud($id, $name);
-        }
-        elseif ($cloud->type === Cloud::GoogleDrive) {
-            $response = $this->googleDriveService->renameCloud($id, $name);
-        }
-        elseif ($cloud->type === Cloud::YandexDisk) {
-            $response = $this->yandexDiskService->renameCloud($id, $name);
-        }
-        else {
-            $response = "Error of type cloud";
-        }
-
-        return $response;
+        return CloudService::renameCloud($id, $name);
     }
 
     public function remove($id)
