@@ -45,7 +45,8 @@ return [
 
 		'local' => [
 			'driver' => 'local',
-			'root'   => storage_path().'/app',
+            'root'   => '/home/vagrant/Code/Laravel/MultiCloud/storage/app',
+			//'root'   => storage_path().'/app',
 		],
 
 		's3' => [
