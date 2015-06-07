@@ -1,6 +1,7 @@
 <?php namespace App\Services;
 
 use App\Cloud;
+use \Auth;
 
 class CloudActionService {
 
@@ -17,6 +18,11 @@ class CloudActionService {
         $this->dropBoxService = $dropBoxServices;
         $this->googleDriveService = $googleDriveService;
         $this->yandexDiskService = $yandexDiskService;
+    }
+
+    public function create($attributes)
+    {
+        return Cloud::create(array_merge($attributes, ['user_id' => Auth::user()->id]));
     }
 
     public function getInfo($id)

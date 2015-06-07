@@ -4,9 +4,20 @@ use \Response;
 use App\Http\Requests;
 use App\Services\CloudActionService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use \Auth;
 
 class CloudController extends Controller {
+
+    protected static $rules = [
+        'user_id' => 'required|exists:users,id',
+        'access_token' => 'required|string',
+        'uid' => 'required|string',
+        'name' => 'required|unique|string',
+        'type' => 'required|integer|min:1|max:3',
+        'token_type' => 'string',
+        'expires_in' => 'string',
+        'created' => 'string'
+    ];
 
     protected $cloudActionService;
 
@@ -28,7 +39,9 @@ class CloudController extends Controller {
 
     public function store(Request $request)
     {
-        //save a cloud info
+        $this->validate($request, self::$rules);
+
+        return $this->cloudActionService->create($request->all());
     }
 
 	/**

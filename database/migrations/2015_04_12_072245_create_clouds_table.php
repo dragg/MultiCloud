@@ -21,7 +21,7 @@ class CreateCloudsTable extends Migration {
             $table->string('expires_in')->nullable();
             $table->string('created')->nullable();
             $table->string('uid');//cloud's user id
-            $table->string('name')->unique();;
+            $table->string('name')->unique();
             $table->timestamps();
         });
 	}
