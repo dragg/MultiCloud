@@ -13,7 +13,7 @@ class CloudController extends Controller {
     public function __construct(CloudActionService $cloudActionService)
     {
         $this->cloudActionService = $cloudActionService;
-        $this->middleware('clouds.access', ['except' => 'index']);
+        $this->middleware('clouds.access', ['except' => 'index', 'store']);
     }
 
 	/**
@@ -25,6 +25,11 @@ class CloudController extends Controller {
 	{
         return Auth::user()->clouds;
 	}
+
+    public function store(Request $request)
+    {
+        //save a cloud info
+    }
 
 	/**
 	 * Display the specified resource.

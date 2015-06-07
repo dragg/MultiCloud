@@ -32,17 +32,6 @@ class ContentController extends Controller {
 	}
 
 	/**
-	 * Show the form for creating a new resource.
-     *
-     * @param  int  $cloudId
-	 * @return Response
-	 */
-	public function create($cloudId)
-	{
-        return [$cloudId];
-	}
-
-	/**
 	 * Store a newly created resource in storage.
 	 *
      * @param  int  $cloudId
@@ -71,18 +60,6 @@ class ContentController extends Controller {
         }
 
         return $response;
-	}
-
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-     * @param  int  $cloudId
-     * @param  int  $path
-	 * @return Response
-	 */
-	public function edit($cloudId, $path)
-	{
-        return [$cloudId, $path];
 	}
 
 	/**
