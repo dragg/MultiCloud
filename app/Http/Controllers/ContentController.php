@@ -57,6 +57,9 @@ class ContentController extends Controller {
             $response = [$this->contentService->shareStart($cloudId, $path)];
         } else {
             $response = $this->getContents($cloudId, $path);
+
+            //When only a file need download
+            //return response()->download(storage_path('file.php'));
         }
 
         return $response;
