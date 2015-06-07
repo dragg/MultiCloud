@@ -2,7 +2,6 @@
 
 use App\Cloud;
 use \Auth;
-use \App\Services\CloudService;
 
 class CloudActionService {
 
@@ -48,11 +47,6 @@ class CloudActionService {
         return $response;
     }
 
-    public function rename($id, $name)
-    {
-        return CloudService::renameCloud($id, $name);
-    }
-
     public function remove($id)
     {
         $cloud = $this->getCloud($id);
@@ -73,9 +67,31 @@ class CloudActionService {
         return $response;
     }
 
+    public function update($id, $attributes)
+    {
+        $cloud = $this->getCloud($id);
+
+        $properties = ['name', 'uid', 'type','access_token', 'token_type', 'expires_in', 'created'];
+
+        foreach($properties as $property) {
+            if(array_key_exists($property, $attributes)) {
+                $cloud->$property = $attributes[$property];
+            }
+        }
+
+        $cloud->save();
+
+        return $cloud;
+    }
+
+    /**
+     * @param $id Integer It's cloud's id
+     * @return \App\Cloud
+     */
+
     private function getCloud($id)
     {
-        return Cloud::findOrFail((int)$id);
+        return CloudService::getCloud($id);
     }
 
 }

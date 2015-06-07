@@ -64,7 +64,7 @@ class CloudController extends Controller {
 	 */
 	public function update(Request $request, $id)
 	{
-        return $this->cloudActionService->rename($id, $request->get('name'));
+        return $this->cloudActionService->update($id, $request->all());
 	}
 
 	/**
