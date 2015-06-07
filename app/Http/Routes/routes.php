@@ -1,11 +1,13 @@
 <?php
 
+Route::post('/auth/login', 'Auth\AuthenticateController@authenticate');
+
 Route::controllers([
-	'auth' => 'Auth\AuthController',
+    'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
 ]);
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['jwt.auth']], function() {
 
     Route::get('/', 'HomeController@index');
 
@@ -16,6 +18,6 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('tasks', 'TaskController@index');
 
     //Need leave it at the end of file! Or need change all auth url on clouds!
-    Route::controller('/', 'Cloud\CloudAuthController');
+    Route::controller('', 'Cloud\CloudAuthController');
 
 });
