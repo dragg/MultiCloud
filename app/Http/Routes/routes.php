@@ -1,13 +1,15 @@
 <?php
 
-Route::post('/auth/login', 'Auth\AuthenticateController@authenticate');
+//Route::post('/auth/login', 'Auth\AuthenticateController@authenticate');
 
 Route::controllers([
     'auth' => 'Auth\AuthController',
 	'password' => 'Auth\PasswordController'
 ]);
 
-Route::group(['middleware' => ['jwt.auth']], function() {
+
+
+Route::group(['middleware' => ['auth']], function() {
 
     Route::get('/', 'HomeController@index');
 
