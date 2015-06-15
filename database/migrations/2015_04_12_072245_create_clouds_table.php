@@ -14,7 +14,7 @@ class CreateCloudsTable extends Migration {
 	{
         Schema::create('clouds', function(Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('user_id');
+            $table->integer('user_id')->unsigned();
             $table->integer('type');//dropbox or yandex disk or google drive
             $table->string('access_token');
             $table->string('token_type')->nullable();
@@ -23,6 +23,8 @@ class CreateCloudsTable extends Migration {
             $table->string('uid');//cloud's user id
             $table->string('name')->unique();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users');
         });
 	}
 
